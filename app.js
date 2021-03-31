@@ -1,27 +1,39 @@
 let button = document.querySelector('button')
-let resultTour = document.getElementById('resultTour')
+let resultTour
 let resultGamer = document.getElementById('resultGamer')
 
 button.addEventListener('click', () => {
     let regexp = /[а-яА-Я]+/
-    let strings = resultTour.value
-                            .split('\n')
-                            .map((s) => {
-                                return s.substring(s.match(regexp).index)
-                            })
-    for (let iterator of strings) {
-        console.log(getGameResult(iterator))
-    }
-    //console.log(resultGamer.value)
+    resultOfTour = getGames(document.getElementById('resultTour'))
+    resultGamer = getGames(document.getElementById('resultGamer'))
+    console.log(resultOfTour)
+    console.log(resultGamer)
 })
 
-function getGameResult(string) {
-    let regExp = /[^0-9А-Яа-я]+/
-    return string.split(regExp)
-                 .filter((e) => {
-                  console.log(e)
-                  return e.length > 1 && /[а-яА-Я]+/.test(e)
-    })
+function getGames(results) {
+    return results.value
+                  .split('\n')
+                  .map((s) => {
+                        let result = getGameResult(
+                                        s.substring(s.match(regexp).index)
+                                         .trim()
+                                        )
+                        let out = {}
+                        out[result[0]] = parseInt(result[2])
+                        out[result[1]] = parseInt(result[3])
+                        out['hostWin'] = out[result[0]] > out[result[1]]
+                        out['isDraw'] = out[result[0]] === out[result[1]]
+                        return out
+                    })
+}
+
+function getGameResult(game) {
+    let regExp = /[^0-9А-Яа-я]{2,}/
+    return game.split(regExp)
+}
+
+function compareResults(resultOfTour, resultGamer) {
+    
 }
 
 // function shell(resultTour, inputData, result) {
@@ -29,3 +41,12 @@ function getGameResult(string) {
 //     let elementOut = document.getElementById(result);
 //     elementOut.innerHTML = inputElement;
 // }
+
+// 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
+// 21   06.03.2021  16:30   Ротор – Химки   1 : 1   
+// 21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
+// 21   07.03.2021  14:00   Урал – Уфа   1 : 0   
+// 21   07.03.2021  16:30   Динамо М – Тамбов   2 : 0   
+// 21   07.03.2021  19:00   Спартак М – Краснодар   1 : 2
+// 21   08.03.2021  14:00   Арсенал – Локомотив М   0 : 2   
+// 21   08.03.2021  16:30   Рубин – Зенит   1 : 2
