@@ -1,5 +1,6 @@
 const idResultTour = 'resultTour'
 const idResultGamer = 'resultGamer'
+const idResult = 'result'
 
 const host = 'host'
 const guest = 'guest'
@@ -9,17 +10,16 @@ const goals = 'goals'
 
 let resultTour
 let resultGamer
+let scores
 
 let button = document.querySelector('button')
 
 button.addEventListener('click', () => {
-    let regexp = /[а-яА-Я]+/
     resultTour = getGames(document.getElementById(idResultTour))
     resultGamer = getGames(document.getElementById(idResultGamer))
-    // console.log(resultTour)
-    // console.log(resultGamer)
-
-    console.log(getScores(resultTour, resultGamer))
+    
+    scores = getScores(resultGamer)
+    showScores(scores)
 })
 
 function getGames(results) {
@@ -31,7 +31,7 @@ function getGames(results) {
                     .split('\n')
                     .map((s) => {
                         let result = getGameResultFromString(
-                                        s.substring(s.match(regexp).index)
+                                        s.substring(s.match(/[а-яА-Я]+/).index)
                                          .trim()
                                         )
                         let out = {}
@@ -76,11 +76,10 @@ function compare(gameSource, game) {
     }
 }
 
-// function shell(resultTour, inputData, result) {
-//     let inputElement = document.getElementById(input).value;
-//     let elementOut = document.getElementById(result);
-//     elementOut.innerHTML = inputElement;
-// }
+function showScores(scores) {
+    let elementOut = document.getElementById(idResult);
+    elementOut.innerHTML = scores;
+}
 
 /*
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
@@ -89,6 +88,15 @@ function compare(gameSource, game) {
 21   07.03.2021  14:00   Урал – Уфа   1 : 0   
 21   07.03.2021  16:30   Динамо М – Тамбов   2 : 0   
 21   07.03.2021  19:00   Спартак М – Краснодар   1 : 2
+21   08.03.2021  14:00   Арсенал – Локомотив М   0 : 2   
+21   08.03.2021  16:30   Рубин – Зенит   1 : 2
+
+21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
+21   06.03.2021  16:30   Ротор – Химки   1 : 1   
+21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
+21   07.03.2021  14:00   Урал – Уфа   1 : 0   
+21   07.03.2021  16:30   Динамо М – Тамбов   2 : 0   
+21   07.03.2021  19:00   Спартак М – Краснодар   1 : 1
 21   08.03.2021  14:00   Арсенал – Локомотив М   0 : 2   
 21   08.03.2021  16:30   Рубин – Зенит   1 : 2
 */
