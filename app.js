@@ -50,10 +50,7 @@ function getGames(results) {
     return results.value
                     .split('\n')
                     .map((s) => {
-                        let result = getGameResultFromString(
-                                        s.substring(s.match(/[а-яА-Я]+/).index)
-                                         .trim()
-                                        )
+                        let result = getGameResultFromString(s)
                         let out = {}
                         out[host] = result[0]
                         out[guest] = result[1]
@@ -64,9 +61,8 @@ function getGames(results) {
                     })
 }
 
-function getGameResultFromString(game) {
-    let regExp = /[^0-9А-Яа-я]{2,}/
-    return game.split(regExp)
+function getGameResultFromString(s) {
+    return s.substring(s.match(/[а-яА-Я]+/).index).trim().split(/[^0-9А-Яа-я]{2,}/)
 }
 
 function getScores(resultGamer) {

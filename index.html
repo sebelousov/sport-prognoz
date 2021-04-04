@@ -65,8 +65,21 @@
     <script src="app.js"></script>
 
     <script>
-      
-
+      s = '21   07.03.2021  19:00   Спартак М – Краснодар   1 : 1'
+      // Рубин сочи 2-1
+      // 23   17.03.2021  18:00   Ротор – Ростов                0:1     
+      // 21   07.03.2021  19:00   Спартак М – Краснодар   1 : 1
+      // 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
+      arr = s.trim()
+        .substring(s.match(/[а-яА-Я]+/).index)
+        .split(/[^0-9А-Яа-я]+/)
+        .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
+        .map(value => value.substring(0, 3).toLowerCase())
+      let game = {}
+      console.log(arr)
+      console.log(teams)
+      game[arr[0]] = teams[arr[0]]
+      console.log(game)
     </script>
   </body>
 </html>
