@@ -33,36 +33,58 @@ let resultGamer
 let scores
 
 let button = document.getElementById(idResultCounter)
+let inputTour = document.getElementById(idResultTour)
+let inputGamer = document.getElementById(idResultGamer)
 
 button.addEventListener('click', () => {
-    resultTour = getGames(document.getElementById(idResultTour))
-    resultGamer = getGames(document.getElementById(idResultGamer))
+    resultTour = getGames(inputTour)
+    resultGamer = getGames(inputGamer)
     
     scores = getScores(resultGamer)
     showScores(scores)
 })
+
+// inputTour.addEventListener('paste', () => {
+//     setTimeout()
+//     console.log(resultTour, inputTour)
+//     resultTour = getGames(inputTour)
+//     console.log(resultTour)
+//     showGames(resultTour, 'showResultTour')
+// })
+
+// inputGamer.addEventListener('paste', () => {
+//     console.log(resultGamer)
+//     showGames(resultGamer, 'showResultGamer')
+// })
 
 function getGames(results) {
     if (results === undefined) {
         return -1
     }
 
-    return results.value
-                    .split('\n')
-                    .map((s) => {
-                        let result = getGameResultFromString(s)
-                        let out = {}
-                        out[host] = result[0]
-                        out[guest] = result[1]
-                        out[goals] = [parseInt(result[2]), parseInt(result[3])]
-                        out[hostWin] = out[goals][0] > out[goals][1] ? 1 : out[goals][0] === out[goals][1] ? 0 : -1
-                        out[liter] = result[0].substring(0, 3).toLowerCase()
-                        return out
-                    })
+    return results.value.split('\n')
+        .map((s) => getGameResultFromString(s))
 }
 
 function getGameResultFromString(s) {
-    return s.substring(s.match(/[а-яА-Я]+/).index).trim().split(/[^0-9А-Яа-я]{2,}/)
+    arr = s.trim()
+        .substring(s.match(/[а-яА-Я]+/).index)
+        .split(/[^0-9А-Яа-я]+/)
+        .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
+        .map(value => {
+            return value.substring(0, 3)
+                        .toLowerCase()
+          })
+    
+    let game = {}
+
+    game[host] = arr[0]
+    game[guest] = arr[1]
+    game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
+    game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+    game[liter] = game[host] + game[guest]
+    
+    return game
 }
 
 function getScores(resultGamer) {
@@ -88,6 +110,21 @@ function showScores(scores) {
     let elementOut = document.getElementById(idResult);
     elementOut.innerHTML = scores;
 }
+
+// function showGames(games, output) {
+//     let elementOut = document.getElementById(output);
+//     let table = '<table>'
+    
+//     for (let i = 0; i < games.length; i++) {
+//         table += '<tr>'
+//         table += '<td>' + games[i][host] + ' - ' + games[i][guest] + '</td>'
+//                  + '<td>' + games[i][goals[0]] + ' - ' + games[i][goals[0]] + '</td>'
+//         table += '</tr>'
+//     }
+    
+//     table += '</table>'
+//     elementOut.insertAdjacentHTML('afterbegin', table)
+// }
 
 /*
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
