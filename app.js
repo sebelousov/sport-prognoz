@@ -37,25 +37,26 @@ let inputTour = document.getElementById(idResultTour)
 let inputGamer = document.getElementById(idResultGamer)
 
 button.addEventListener('click', () => {
-    resultTour = getGames(inputTour)
-    resultGamer = getGames(inputGamer)
+    // resultTour = getGames(inputTour)
+    // resultGamer = getGames(inputGamer)
     
     scores = getScores(resultGamer)
     showScores(scores)
 })
 
-// inputTour.addEventListener('paste', () => {
-//     setTimeout()
-//     console.log(resultTour, inputTour)
-//     resultTour = getGames(inputTour)
-//     console.log(resultTour)
-//     showGames(resultTour, 'showResultTour')
-// })
+inputTour.addEventListener('paste', () => {
+    setTimeout(() => {
+        resultTour = getGames(inputTour)
+        showGames(resultTour, 'showResultTour')
+      }, 100)
+})
 
-// inputGamer.addEventListener('paste', () => {
-//     console.log(resultGamer)
-//     showGames(resultGamer, 'showResultGamer')
-// })
+inputGamer.addEventListener('paste', () => {
+    setTimeout(() => {
+        resultGamer = getGames(inputGamer)
+        showGames(resultGamer, 'showResultGamer')
+      }, 100)
+})
 
 function getGames(results) {
     if (results === undefined) {
@@ -107,24 +108,30 @@ function compare(gameSource, game) {
 }
 
 function showScores(scores) {
-    let elementOut = document.getElementById(idResult);
-    elementOut.innerHTML = scores;
+    let elementOut = document.getElementById(idResult)
+    elementOut.innerHTML = scores
 }
 
-// function showGames(games, output) {
-//     let elementOut = document.getElementById(output);
-//     let table = '<table>'
+function showGames(games, output) {
+    let elementOut = document.getElementById(output);
+    let table = '<table>'
     
-//     for (let i = 0; i < games.length; i++) {
-//         table += '<tr>'
-//         table += '<td>' + games[i][host] + ' - ' + games[i][guest] + '</td>'
-//                  + '<td>' + games[i][goals[0]] + ' - ' + games[i][goals[0]] + '</td>'
-//         table += '</tr>'
-//     }
+    for (let i = 0; i < games.length; i++) {
+        //console.log(games[i][goals][0])
+        table += '<tr>'
+        table += '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>'
+                 + '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>'
+        table += '</tr>'
+    }
     
-//     table += '</table>'
-//     elementOut.insertAdjacentHTML('afterbegin', table)
-// }
+    table += '</table>'
+    // elementOut.insertAdjacentHTML('afterbegin', table)
+    elementOut.innerHTML = table
+}
+
+function checkoutGame(game) {
+    //
+}
 
 /*
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
