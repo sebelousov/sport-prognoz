@@ -2,6 +2,7 @@ const idResultTour = 'resultTour'
 const idResultGamer = 'resultGamer'
 const idResultCounter = 'resultCounter'
 const idResult = 'result'
+const idTableFormat = 'tableFormat'
 
 const host = 'host'
 const guest = 'guest'
@@ -35,6 +36,7 @@ let scores
 let button = document.getElementById(idResultCounter)
 let inputTour = document.getElementById(idResultTour)
 let inputGamer = document.getElementById(idResultGamer)
+let tableFormat = document.getElementById(idTableFormat)
 
 button.addEventListener('click', () => {
     // resultTour = getGames(inputTour)
@@ -56,6 +58,13 @@ inputGamer.addEventListener('paste', () => {
         resultGamer = getGames(inputGamer)
         showGames(resultGamer, 'showResultGamer')
       }, 100)
+})
+
+tableFormat.addEventListener('paste', () => {
+    setTimeout(() => {
+        console.log('ooops...')
+        tableFormat.value = 'ooops...'
+      }, 1)
 })
 
 function getGames(results) {
