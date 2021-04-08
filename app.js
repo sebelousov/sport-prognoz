@@ -59,6 +59,8 @@ inputGamer.addEventListener('paste', () => {
 
 tableFormat.addEventListener('paste', () => {
     setTimeout(() => {
+        
+        
         console.log('ooops...')
         tableFormat.value = 'ooops...'
       }, 1)
@@ -148,6 +150,10 @@ function checkoutGame(game) {
     //
 }
 
+function addTags(string, tag) {
+    return tag + string + tag
+}
+
 /*
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
 21   06.03.2021  16:30   Ротор – Химки   1 : 1   
@@ -205,4 +211,20 @@ scores - 6
 Ростов спартак 1-1
 Зенит химки 2-0
 
+1	Пал_Геннадичъ	142	10
+2	Хрустальная гора	141	6
+3	Толич1	141	10
+4	Ded_Moroz	137	10
+5	Smith242	129	10
+6	Быш	120	10
+7	Fass 18	10	0
+
+[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]
+[tr][td]1[/td][td]Пал_Геннадичъ[/td][td]142[/td][td]10[/td][/tr]
+[tr][td]2[/td][td]Хрустальная гора[/td][td]141[/td][td]6[/td][/tr]
+[tr][td]3[/td][td]Толич1[/td][td]141[/td][td]10[/td][/tr]
+[tr][td]4[/td][td]Ded_Moroz[/td][td]137[/td][td]10[/td][/tr]
+[tr][td]5[/td][td]Smith242[/td][td]129[/td][td]10[/td][/tr]
+[tr][td]6[/td][td]Быш[/td][td]120[/td][td]10[/td][/tr]
+[tr][td]7[/td][td]Fass 18[/td][td]10[/td][td]0[/td][/tr]
 */
