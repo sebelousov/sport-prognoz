@@ -39,9 +39,6 @@ let inputGamer = document.getElementById(idResultGamer)
 let tableFormat = document.getElementById(idTableFormat)
 
 button.addEventListener('click', () => {
-    // resultTour = getGames(inputTour)
-    // resultGamer = getGames(inputGamer)
-    
     scores = getScores(resultGamer)
     showScores(scores)
 })
@@ -98,6 +95,10 @@ function getGameResultFromString(s) {
 }
 
 function getScores(resultGamer) {
+    if (!resultGamer || !resultTour) {
+        return -1
+    }
+
     let scores = 0
     resultGamer.forEach(game => {
         let gameSource = resultTour.find(g => g[liter] === game[liter])
@@ -118,7 +119,12 @@ function compare(gameSource, game) {
 
 function showScores(scores) {
     let elementOut = document.getElementById(idResult)
-    elementOut.innerHTML = scores
+    
+    if (scores === -1) {
+        elementOut.innerHTML = 'No input data...'
+    } else {
+        elementOut.innerHTML = scores
+    }
 }
 
 function showGames(games, output) {
