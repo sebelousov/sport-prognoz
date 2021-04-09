@@ -59,12 +59,26 @@ inputGamer.addEventListener('paste', () => {
 
 tableFormat.addEventListener('paste', () => {
     setTimeout(() => {
+        tableFormat.value = formatTable(tableFormat.value)
         
+        console.log(tableFormat.value)
         
-        console.log('ooops...')
-        tableFormat.value = 'ooops...'
       }, 1)
 })
+
+function formatTable(value) {
+    if (!value) {
+        return -1
+    }
+    
+    let head = '[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]\n'
+    let table = value.replaceAll(/\t/g, '[/td][td]')
+        .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
+    
+    table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
+    
+    return table
+}
 
 function getGames(results) {
     if (results === undefined) {
