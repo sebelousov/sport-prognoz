@@ -47,46 +47,31 @@ inputTour.addEventListener('paste', () => {
     setTimeout(() => {
         resultTour = getGames(inputTour)
         showGames(resultTour, 'showResultTour')
-      }, 100)
+      }, 1)
 })
 
 inputGamer.addEventListener('paste', () => {
     setTimeout(() => {
         resultGamer = getGames(inputGamer)
         showGames(resultGamer, 'showResultGamer')
-      }, 100)
+      }, 1)
 })
 
 tableFormat.addEventListener('paste', () => {
     setTimeout(() => {
         tableFormat.value = formatTable(tableFormat.value)
-        
-        console.log(tableFormat.value)
-        
       }, 1)
 })
 
-function formatTable(value) {
-    if (!value) {
-        return -1
-    }
-    
-    let head = '[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]\n'
-    let table = value.replaceAll(/\t/g, '[/td][td]')
-        .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
-    
-    table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
-    
-    return table
-}
-
 function getGames(results) {
     if (results === undefined) {
-        return -1
+        return undefined
     }
 
-    return results.value.split('\n')
+    let games = results.value.split('\n')
         .map((s) => getGameResultFromString(s))
+
+    return checkoutGames(games)
 }
 
 function getGameResultFromString(s) {
@@ -114,6 +99,9 @@ function getScores(resultGamer) {
     if (!resultGamer || !resultTour) {
         return -1
     }
+    
+    // console.log(resultTour)
+    // console.log(resultGamer)
 
     let scores = 0
     resultGamer.forEach(game => {
@@ -145,23 +133,54 @@ function showScores(scores) {
 
 function showGames(games, output) {
     let elementOut = document.getElementById(output);
-    let table = '<table>'
-    
-    for (let i = 0; i < games.length; i++) {
-        //console.log(games[i][goals][0])
-        table += '<tr>'
-        table += '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>'
-                 + '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>'
-        table += '</tr>'
+    let table = ''
+
+    if (games) {
+        table = '<table>'
+        
+        for (let i = 0; i < games.length; i++) {
+            //console.log(games[i][goals][0])
+            table += '<tr>'
+            table += '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>'
+                    + '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>'
+            table += '</tr>'
+        }
+        
+        table += '</table>'
+    } else {
+        table = 'Uncorrect input data...'
     }
-    
-    table += '</table>'
-    // elementOut.insertAdjacentHTML('afterbegin', table)
+
     elementOut.innerHTML = table
 }
 
-function checkoutGame(game) {
-    //
+function checkoutGames(games) {
+    /* 
+    0. resultTour.length < resultGamer.length
+    1. host, guest должны быть строкой из букв длиной 3 символа.
+    2. goals должен быть массивом длиной 2 с двумя числами больше и равно нулю. 
+    3. hostWin должен быть равен 1, 0 или -1. 
+    4. liter должен быть строкой из букв длиной 6 символов. 
+    */
+
+    
+    
+
+    return games
+}
+
+function formatTable(value) {
+    if (!value) {
+        return -1
+    }
+    
+    let head = '[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]\n'
+    let table = value.replaceAll(/\t/g, '[/td][td]')
+        .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
+    
+    table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
+    
+    return table
 }
 
 function addTags(string, tag) {
