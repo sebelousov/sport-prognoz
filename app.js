@@ -29,9 +29,10 @@ const teams = {
     'там': 'Тамбов'
 }
 
-let resultTour
-let resultGamer
-let scores
+const view = {
+    'resultTour': 'showResultTour',
+    'resultGamer': 'showResultGamer'
+}
 
 let button = document.getElementById(idResultCounter)
 let inputTour = document.getElementById(idResultTour)
@@ -39,23 +40,26 @@ let inputGamer = document.getElementById(idResultGamer)
 let tableFormat = document.getElementById(idTableFormat)
 
 button.addEventListener('click', () => {
-    scores = getScores(resultGamer)
+    let scores = getScores()
     showScores(scores)
 })
 
 inputTour.addEventListener('paste', () => {
     setTimeout(() => {
-        resultTour = getGames(inputTour)
-        showGames(resultTour, 'showResultTour')
+        refreshTextArea(inputTour)
       }, 1)
 })
 
-inputGamer.addEventListener('paste', () => {
+inputGamer.addEventListener('paste', (event) => {
     setTimeout(() => {
-        resultGamer = getGames(inputGamer)
-        showGames(resultGamer, 'showResultGamer')
+        refreshTextArea(inputGamer)
       }, 1)
 })
+
+function refreshTextArea(textArea) {
+    let games = getGames(textArea)
+    showGames(games, view[textArea.id])
+}
 
 tableFormat.addEventListener('paste', () => {
     setTimeout(() => {
@@ -95,15 +99,10 @@ function getGameResultFromString(s) {
     return game
 }
 
-function getScores(resultGamer) {
-    if (!resultGamer || !resultTour) {
-        return -1
-    }
-    
-    // console.log(resultTour)
-    // console.log(resultGamer)
-
+function getScores() {
     let scores = 0
+    let resultTour = getGames(inputTour)
+    let resultGamer = getGames(inputGamer)
     resultGamer.forEach(game => {
         let gameSource = resultTour.find(g => g[liter] === game[liter])
         scores += compare(gameSource, game)
