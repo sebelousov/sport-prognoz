@@ -44,15 +44,15 @@ button.addEventListener('click', () => {
     showScores(scores)
 })
 
-inputTour.addEventListener('paste', () => {
+inputTour.addEventListener('paste', (event) => {
     setTimeout(() => {
-        refreshTextArea(inputTour)
+        refreshTextArea(document.querySelector('#' + event.target.id))
       }, 1)
 })
 
 inputGamer.addEventListener('paste', (event) => {
     setTimeout(() => {
-        refreshTextArea(inputGamer)
+        refreshTextArea(document.querySelector('#' + event.target.id))
       }, 1)
 })
 
