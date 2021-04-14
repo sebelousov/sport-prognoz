@@ -38,6 +38,8 @@ let button = document.getElementById(idResultCounter)
 let inputTour = document.getElementById(idResultTour)
 let inputGamer = document.getElementById(idResultGamer)
 let tableFormat = document.getElementById(idTableFormat)
+let buttonRefreshResultTour = document.getElementById('refreshResultTour')
+let buttonRrefreshResultGamer = document.getElementById('refreshResultGamer')
 
 button.addEventListener('click', () => {
     let scores = getScores()
@@ -46,26 +48,50 @@ button.addEventListener('click', () => {
 
 inputTour.addEventListener('paste', (event) => {
     setTimeout(() => {
-        refreshTextArea(document.querySelector('#' + event.target.id))
+        refreshTable(document.querySelector('#' + event.target.id))
       }, 1)
 })
 
 inputGamer.addEventListener('paste', (event) => {
     setTimeout(() => {
-        refreshTextArea(document.querySelector('#' + event.target.id))
+        refreshTable(document.querySelector('#' + event.target.id))
       }, 1)
 })
-
-function refreshTextArea(textArea) {
-    let games = getGames(textArea)
-    showGames(games, view[textArea.id])
-}
 
 tableFormat.addEventListener('paste', () => {
     setTimeout(() => {
         tableFormat.value = formatTable(tableFormat.value)
       }, 1)
 })
+
+buttonRefreshResultTour.addEventListener('click', () => {
+    setTimeout(() => {
+        refreshTable(document.getElementById(idResultTour))
+      }, 1)
+})
+
+buttonRrefreshResultGamer.addEventListener('click', () => {
+    setTimeout(() => {
+        refreshTable(document.getElementById(idResultGamer))
+      }, 1)
+})
+
+function refreshTable(textArea) {
+    let games = getGames(textArea)
+    showGames(games, view[textArea.id])
+    // refreshTextArea(games, textArea) ???
+}
+
+function refreshTextArea(games, textArea) {
+    let table = ''
+    for (let i = 0; i < games.length; i++) {
+        table += `${teams[games[i][host]]} - ${teams[games[i][guest]]}, ${games[i][goals][0]} - ${games[i][goals][1]}`
+        if (i !== games.length) {
+            table += '\n'
+        }
+    }
+    textArea.value = table
+}
 
 function getGames(results) {
     if (results === undefined) {
@@ -131,6 +157,7 @@ function showScores(scores) {
 }
 
 function showGames(games, output) {
+    console.log(output)
     let elementOut = document.getElementById(output);
     let table = ''
 
@@ -138,11 +165,10 @@ function showGames(games, output) {
         table = '<table>'
         
         for (let i = 0; i < games.length; i++) {
-            //console.log(games[i][goals][0])
-            table += '<tr>'
-            table += '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>'
-                    + '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>'
-            table += '</tr>'
+            table += '<tr>' + 
+                '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>' +
+                '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>' +
+                '</tr>'
         }
         
         table += '</table>'
