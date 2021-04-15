@@ -34,17 +34,42 @@ const view = {
     'resultGamer': 'showResultGamer'
 }
 
+class Element {
+    constructor(options) {
+        this.$element = document.getElementById(options.selector)
+    }
+}
+
+class Button extends Element {
+    constructor(options) {
+        super(options)
+        this.output = options.output
+        this.$element.addEventListener('click', () => {
+            setTimeout(() => {
+                refreshTable(document.getElementById(output))
+            }, 1)
+        })
+    }
+}
+
+class Input extends Element {
+    constructor(options) {
+        super(options)
+    }
+}
+
+class Output extends Element {
+    constructor(options) {
+        super(options)
+    }
+}
+
 let button = document.getElementById(idResultCounter)
 let inputTour = document.getElementById(idResultTour)
 let inputGamer = document.getElementById(idResultGamer)
 let tableFormat = document.getElementById(idTableFormat)
 let buttonRefreshResultTour = document.getElementById('refreshResultTour')
 let buttonRrefreshResultGamer = document.getElementById('refreshResultGamer')
-
-button.addEventListener('click', () => {
-    let scores = getScores()
-    showScores(scores)
-})
 
 inputTour.addEventListener('paste', (event) => {
     setTimeout(() => {
@@ -62,6 +87,11 @@ tableFormat.addEventListener('paste', () => {
     setTimeout(() => {
         tableFormat.value = formatTable(tableFormat.value)
       }, 1)
+})
+
+button.addEventListener('click', () => {
+    let scores = getScores()
+    showScores(scores)
 })
 
 buttonRefreshResultTour.addEventListener('click', () => {
