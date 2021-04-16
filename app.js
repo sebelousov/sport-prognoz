@@ -40,71 +40,116 @@ class Element {
     }
 }
 
-class Button extends Element {
+class ButtonRefresh extends Element {
     constructor(options) {
         super(options)
+        this.input = options.input
         this.output = options.output
         this.$element.addEventListener('click', () => {
             setTimeout(() => {
-                refreshTable(document.getElementById(output))
+                refreshTable(document.getElementById(this.input))
             }, 1)
         })
     }
 }
 
-class Input extends Element {
+class ButtonCounter extends Element {
+    constructor(options) {
+        super(options)
+        this.tour = options.tour
+        this.gamer = options.gamer
+        this.$element.addEventListener('click', () => {
+            let scores = getScores()
+            showScores(scores)
+        })
+    }
+}
+
+class Textarea extends Element {
+    constructor(options) {
+        super(options)
+        this.$element.addEventListener('paste', (event) => {
+            setTimeout(() => {
+                this.games = getGames(this.$element)
+            }, 1)
+        })
+        
+    }
+}
+
+class Table extends Element {
     constructor(options) {
         super(options)
     }
 }
 
-class Output extends Element {
-    constructor(options) {
-        super(options)
-    }
-}
-
-let button = document.getElementById(idResultCounter)
-let inputTour = document.getElementById(idResultTour)
-let inputGamer = document.getElementById(idResultGamer)
-let tableFormat = document.getElementById(idTableFormat)
-let buttonRefreshResultTour = document.getElementById('refreshResultTour')
-let buttonRrefreshResultGamer = document.getElementById('refreshResultGamer')
-
-inputTour.addEventListener('paste', (event) => {
-    setTimeout(() => {
-        refreshTable(document.querySelector('#' + event.target.id))
-      }, 1)
+let resultTour = new Textarea({
+    selector: 'resultTour'
 })
 
-inputGamer.addEventListener('paste', (event) => {
-    setTimeout(() => {
-        refreshTable(document.querySelector('#' + event.target.id))
-      }, 1)
+let resultGamer = new Textarea({
+    selector: 'resultGamer'
 })
 
-tableFormat.addEventListener('paste', () => {
-    setTimeout(() => {
-        tableFormat.value = formatTable(tableFormat.value)
-      }, 1)
+let resultCounter = new ButtonCounter({
+    selector: 'resultCounter',
+    tour: 'resultTour',
+    gamer: 'resultGamer'
 })
 
-button.addEventListener('click', () => {
-    let scores = getScores()
-    showScores(scores)
+let refreshResultTour = new ButtonRefresh({
+    selector: 'refreshResultTour',
+    input: 'resultTour',
+    output: 'showResultTour'
 })
 
-buttonRefreshResultTour.addEventListener('click', () => {
-    setTimeout(() => {
-        refreshTable(document.getElementById(idResultTour))
-      }, 1)
+let refreshResultGamer = new ButtonRefresh({
+    selector: 'refreshResultGamer'
 })
 
-buttonRrefreshResultGamer.addEventListener('click', () => {
-    setTimeout(() => {
-        refreshTable(document.getElementById(idResultGamer))
-      }, 1)
-})
+
+
+// let button = document.getElementById(idResultCounter)
+// let inputTour = document.getElementById(idResultTour)
+// let inputGamer = document.getElementById(idResultGamer)
+// let tableFormat = document.getElementById(idTableFormat)
+// let buttonRefreshResultTour = document.getElementById('refreshResultTour')
+// let buttonRrefreshResultGamer = document.getElementById('refreshResultGamer')
+
+// inputTour.addEventListener('paste', (event) => {
+//     setTimeout(() => {
+//         refreshTable(document.querySelector('#' + event.target.id))
+//       }, 1)
+// })
+
+// inputGamer.addEventListener('paste', (event) => {
+//     setTimeout(() => {
+//         refreshTable(document.querySelector('#' + event.target.id))
+//       }, 1)
+// })
+
+// tableFormat.addEventListener('paste', () => {
+//     setTimeout(() => {
+//         tableFormat.value = formatTable(tableFormat.value)
+//       }, 1)
+// })
+
+// button.addEventListener('click', () => {
+//     let scores = getScores()
+//     showScores(scores)
+// })
+
+// buttonRefreshResultTour.addEventListener('click', () => {
+//     setTimeout(() => {
+//         refreshTable(document.getElementById(idResultTour))
+//       }, 1)
+// })
+
+// buttonRrefreshResultGamer.addEventListener('click', () => {
+//     setTimeout(() => {
+//         refreshTable(document.getElementById(idResultGamer))
+//       }, 1)
+// })
 
 function refreshTable(textArea) {
     let games = getGames(textArea)
@@ -187,7 +232,6 @@ function showScores(scores) {
 }
 
 function showGames(games, output) {
-    console.log(output)
     let elementOut = document.getElementById(output);
     let table = ''
 
