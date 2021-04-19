@@ -1,9 +1,3 @@
-const idResultTour = 'resultTour'
-const idResultGamer = 'resultGamer'
-const idResultCounter = 'resultCounter'
-const idResult = 'result'
-const idTableFormat = 'tableFormat'
-
 const host = 'host'
 const guest = 'guest'
 const hostWin = 'hostWin'
@@ -87,12 +81,35 @@ class Textarea extends Element {
     }
 }
 
+class Table extends Element {
+    constructor(options) {
+        super(options)
+        this.$element.addEventListener('paste', () => {
+            setTimeout(() => {
+                this.$element.value = this.formatTable(this.$element.value)
+            }, 1)
+        })
+    }
+
+    formatTable(value) {
+        if (!value) {
+            return -1
+        }
+        
+        let head = '[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]\n'
+        let table = value.replaceAll(/\t/g, '[/td][td]')
+            .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
+        
+        table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
+        
+        return table
+    }
+}
+
 class Output extends Element {
     constructor(options) {
         super(options)
     }
-
-    
 }
 
 class ButtonRefresh extends Element {
@@ -134,8 +151,12 @@ class ButtonCounter extends Element {
         this.gamer = options.input[1]
         this.output = options.output
         this.$element.addEventListener('click', () => {
-            let scores = this.getScores(this.tour.games, this.gamer.games)
-            this.showScores(scores)
+            try {
+                this.output.$element.innerHTML = this.getScores(this.tour.games, this.gamer.games)
+            } catch (error) {
+                this.output.$element.innerHTML = 'Uncorrect input data...'
+            }
+            
         })
     }
 
@@ -157,16 +178,6 @@ class ButtonCounter extends Element {
             return 0
         }
     }
-
-    showScores(scores) {
-        let elementOut = document.getElementById(idResult)
-        
-        if (scores === -1) {
-            elementOut.innerHTML = 'No input data...'
-        } else {
-            elementOut.innerHTML = scores
-        }
-    }
 }
 
 let resultTour = new Textarea({
@@ -177,10 +188,8 @@ let resultGamer = new Textarea({
     selector: 'resultGamer'
 })
 
-let counter = new ButtonCounter({
-    selector: 'resultCounter',
-    input: [resultTour, resultGamer],
-    output: document.querySelector('resultGamer')
+let outputScorces = new Output({
+    selector: 'result'
 })
 
 let outputTour = new Output({
@@ -189,6 +198,10 @@ let outputTour = new Output({
 
 let outputGamer = new Output({
     selector: 'showResultGamer'
+})
+
+let table = new Table({
+    selector: 'tableFormat'
 })
 
 let refreshTour = new ButtonRefresh({
@@ -201,6 +214,12 @@ let refreshGamer = new ButtonRefresh({
     selector: 'refreshResultGamer',
     input: [resultGamer],
     output: outputGamer
+})
+
+let counter = new ButtonCounter({
+    selector: 'resultCounter',
+    input: [resultTour, resultGamer],
+    output: outputScorces
 })
 
 function refreshTextArea(games, textArea) {
@@ -229,25 +248,20 @@ function checkoutGames(games) {
     return games
 }
 
-function formatTable(value) {
-    if (!value) {
-        return -1
-    }
-    
-    let head = '[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]\n'
-    let table = value.replaceAll(/\t/g, '[/td][td]')
-        .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
-    
-    table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
-    
-    return table
-}
-
 function addTags(string, tag) {
     return tag + string + tag
 }
 
 /*
+26   17.04.2021  14:00   Ахмат – Химки   3 : 1   
+26   17.04.2021  16:30   Ротор – Динамо М   0 : 3   
+26   17.04.2021  16:30   Локомотив М – Ростов   4 : 1   
+26   17.04.2021  19:00   Краснодар – Зенит   2 : 2   
+26   18.04.2021  12:00   Урал – Рубин   0 : 1   
+26   18.04.2021  14:00   Арсенал – Тамбов   4 : 0   
+26   18.04.2021  16:30   Сочи – ЦСКА   2 : 1   
+26   18.04.2021  19:00   Спартак М – Уфа   0 : 3
+
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
 21   06.03.2021  16:30   Ротор – Химки   1 : 1   
 21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
