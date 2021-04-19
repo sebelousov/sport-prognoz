@@ -56,8 +56,9 @@ class ButtonRefresh extends Element {
 class ButtonCounter extends Element {
     constructor(options) {
         super(options)
-        this.tour = options.tour
-        this.gamer = options.gamer
+        this.tour = options.input[0]
+        this.gamer = options.input[0]
+        this.output = options.output
         this.$element.addEventListener('click', () => {
             let scores = getScores()
             showScores(scores)
@@ -68,16 +69,48 @@ class ButtonCounter extends Element {
 class Textarea extends Element {
     constructor(options) {
         super(options)
-        this.$element.addEventListener('paste', (event) => {
+        this.$element.addEventListener('paste', () => {
             setTimeout(() => {
-                this.games = getGames(this.$element)
+                this.games = this.getGames(this.$element)
+                console.log(this.games)
             }, 1)
         })
+    }
+
+    getGames(textArea) {
+        if (textArea === undefined) {
+            return undefined
+        }
+    
+        let games = textArea.value.split('\n')
+            .map((s) => this.getGameResultFromString(s))
+    
+        return checkoutGames(games)
+    }
+    
+    getGameResultFromString(s) {
+        let arr = s.trim()
+            .substring(s.match(/[а-яА-Я]+/).index)
+            .split(/[^0-9А-Яа-я]+/)
+            .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
+            .map(value => {
+                return value.substring(0, 3)
+                            .toLowerCase()
+              })
         
+        let game = {}
+    
+        game[host] = arr[0]
+        game[guest] = arr[1]
+        game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
+        game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+        game[liter] = game[host] + game[guest]
+        
+        return game
     }
 }
 
-class Table extends Element {
+class Output extends Element {
     constructor(options) {
         super(options)
     }
@@ -91,20 +124,22 @@ let resultGamer = new Textarea({
     selector: 'resultGamer'
 })
 
-let resultCounter = new ButtonCounter({
+let counter = new ButtonCounter({
     selector: 'resultCounter',
-    tour: 'resultTour',
-    gamer: 'resultGamer'
+    input: ['resultTour', 'resultGamer'],
+    output: 'resultGamer'
 })
 
-let refreshResultTour = new ButtonRefresh({
+let refreshTour = new ButtonRefresh({
     selector: 'refreshResultTour',
-    input: 'resultTour',
+    input: ['resultTour'],
     output: 'showResultTour'
 })
 
-let refreshResultGamer = new ButtonRefresh({
-    selector: 'refreshResultGamer'
+let refreshGamer = new ButtonRefresh({
+    selector: 'refreshResultGamer',
+    input: ['resultGamer'],
+    output: 'showResultGamer'
 })
 
 
@@ -168,37 +203,7 @@ function refreshTextArea(games, textArea) {
     textArea.value = table
 }
 
-function getGames(results) {
-    if (results === undefined) {
-        return undefined
-    }
 
-    let games = results.value.split('\n')
-        .map((s) => getGameResultFromString(s))
-
-    return checkoutGames(games)
-}
-
-function getGameResultFromString(s) {
-    arr = s.trim()
-        .substring(s.match(/[а-яА-Я]+/).index)
-        .split(/[^0-9А-Яа-я]+/)
-        .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
-        .map(value => {
-            return value.substring(0, 3)
-                        .toLowerCase()
-          })
-    
-    let game = {}
-
-    game[host] = arr[0]
-    game[guest] = arr[1]
-    game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
-    game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-    game[liter] = game[host] + game[guest]
-    
-    return game
-}
 
 function getScores() {
     let scores = 0
