@@ -40,40 +40,17 @@ class Element {
     }
 }
 
-class ButtonRefresh extends Element {
-    constructor(options) {
-        super(options)
-        this.input = options.input
-        this.output = options.output
-        this.$element.addEventListener('click', () => {
-            setTimeout(() => {
-                refreshTable(document.getElementById(this.input))
-            }, 1)
-        })
-    }
-}
-
-class ButtonCounter extends Element {
-    constructor(options) {
-        super(options)
-        this.tour = options.input[0]
-        this.gamer = options.input[0]
-        this.output = options.output
-        this.$element.addEventListener('click', () => {
-            let scores = getScores()
-            showScores(scores)
-        })
-    }
-}
-
 class Textarea extends Element {
     constructor(options) {
         super(options)
-        this.$element.addEventListener('paste', () => {
-            setTimeout(() => {
-                this.games = this.getGames(this.$element)
-                console.log(this.games)
-            }, 1)
+        // this.$element.addEventListener('paste', () => {
+        //     setTimeout(() => {
+        //         this.games = this.getGames(this.$element)
+        //     }, 1)
+        // })
+
+        this.$element.addEventListener('change', () => {
+            this.games = this.getGames(this.$element)
         })
     }
 
@@ -114,6 +91,82 @@ class Output extends Element {
     constructor(options) {
         super(options)
     }
+
+    
+}
+
+class ButtonRefresh extends Element {
+    constructor(options) {
+        super(options)
+        this.input = options.input[0]
+        this.output = options.output
+        this.$element.addEventListener('click', () => {
+            this.showGames(this.input.games, this.output.$element)
+        })
+    }
+
+    showGames(games, output) {
+        let table = ''
+    
+        if (games) {
+            table = '<table>'
+            
+            for (let i = 0; i < games.length; i++) {
+                table += '<tr>' + 
+                    '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>' +
+                    '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>' +
+                    '</tr>'
+            }
+            
+            table += '</table>'
+        } else {
+            table = 'Uncorrect input data...'
+        }
+    
+        output.innerHTML = table
+    }
+}
+
+class ButtonCounter extends Element {
+    constructor(options) {
+        super(options)
+        this.tour = options.input[0]
+        this.gamer = options.input[1]
+        this.output = options.output
+        this.$element.addEventListener('click', () => {
+            let scores = this.getScores(this.tour.games, this.gamer.games)
+            this.showScores(scores)
+        })
+    }
+
+    getScores(tour, gamer) {
+        let scores = 0
+        gamer.forEach(game => {
+            let gameSource = tour.find(g => g[liter] === game[liter])
+            scores += this.compare(gameSource, game)
+        });
+        return scores
+    }
+
+    compare(gameSource, game) {
+        if (game[goals][0] === gameSource[goals][0] && game[goals][1] === gameSource[goals][1]) {
+            return 3
+        } else if (game[hostWin] === gameSource[hostWin]) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    showScores(scores) {
+        let elementOut = document.getElementById(idResult)
+        
+        if (scores === -1) {
+            elementOut.innerHTML = 'No input data...'
+        } else {
+            elementOut.innerHTML = scores
+        }
+    }
 }
 
 let resultTour = new Textarea({
@@ -126,71 +179,29 @@ let resultGamer = new Textarea({
 
 let counter = new ButtonCounter({
     selector: 'resultCounter',
-    input: ['resultTour', 'resultGamer'],
-    output: 'resultGamer'
+    input: [resultTour, resultGamer],
+    output: document.querySelector('resultGamer')
+})
+
+let outputTour = new Output({
+    selector: 'showResultTour'
+})
+
+let outputGamer = new Output({
+    selector: 'showResultGamer'
 })
 
 let refreshTour = new ButtonRefresh({
     selector: 'refreshResultTour',
-    input: ['resultTour'],
-    output: 'showResultTour'
+    input: [resultTour],
+    output: outputTour
 })
 
 let refreshGamer = new ButtonRefresh({
     selector: 'refreshResultGamer',
-    input: ['resultGamer'],
-    output: 'showResultGamer'
+    input: [resultGamer],
+    output: outputGamer
 })
-
-
-
-// let button = document.getElementById(idResultCounter)
-// let inputTour = document.getElementById(idResultTour)
-// let inputGamer = document.getElementById(idResultGamer)
-// let tableFormat = document.getElementById(idTableFormat)
-// let buttonRefreshResultTour = document.getElementById('refreshResultTour')
-// let buttonRrefreshResultGamer = document.getElementById('refreshResultGamer')
-
-// inputTour.addEventListener('paste', (event) => {
-//     setTimeout(() => {
-//         refreshTable(document.querySelector('#' + event.target.id))
-//       }, 1)
-// })
-
-// inputGamer.addEventListener('paste', (event) => {
-//     setTimeout(() => {
-//         refreshTable(document.querySelector('#' + event.target.id))
-//       }, 1)
-// })
-
-// tableFormat.addEventListener('paste', () => {
-//     setTimeout(() => {
-//         tableFormat.value = formatTable(tableFormat.value)
-//       }, 1)
-// })
-
-// button.addEventListener('click', () => {
-//     let scores = getScores()
-//     showScores(scores)
-// })
-
-// buttonRefreshResultTour.addEventListener('click', () => {
-//     setTimeout(() => {
-//         refreshTable(document.getElementById(idResultTour))
-//       }, 1)
-// })
-
-// buttonRrefreshResultGamer.addEventListener('click', () => {
-//     setTimeout(() => {
-//         refreshTable(document.getElementById(idResultGamer))
-//       }, 1)
-// })
-
-function refreshTable(textArea) {
-    let games = getGames(textArea)
-    showGames(games, view[textArea.id])
-    // refreshTextArea(games, textArea) ???
-}
 
 function refreshTextArea(games, textArea) {
     let table = ''
@@ -201,61 +212,6 @@ function refreshTextArea(games, textArea) {
         }
     }
     textArea.value = table
-}
-
-
-
-function getScores() {
-    let scores = 0
-    let resultTour = getGames(inputTour)
-    let resultGamer = getGames(inputGamer)
-    resultGamer.forEach(game => {
-        let gameSource = resultTour.find(g => g[liter] === game[liter])
-        scores += compare(gameSource, game)
-    });
-    return scores
-}
-
-function compare(gameSource, game) {
-    if (game[goals][0] === gameSource[goals][0] && game[goals][1] === gameSource[goals][1]) {
-        return 3
-    } else if (game[hostWin] === gameSource[hostWin]) {
-        return 1
-    } else {
-        return 0
-    }
-}
-
-function showScores(scores) {
-    let elementOut = document.getElementById(idResult)
-    
-    if (scores === -1) {
-        elementOut.innerHTML = 'No input data...'
-    } else {
-        elementOut.innerHTML = scores
-    }
-}
-
-function showGames(games, output) {
-    let elementOut = document.getElementById(output);
-    let table = ''
-
-    if (games) {
-        table = '<table>'
-        
-        for (let i = 0; i < games.length; i++) {
-            table += '<tr>' + 
-                '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>' +
-                '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>' +
-                '</tr>'
-        }
-        
-        table += '</table>'
-    } else {
-        table = 'Uncorrect input data...'
-    }
-
-    elementOut.innerHTML = table
 }
 
 function checkoutGames(games) {
