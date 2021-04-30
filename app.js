@@ -188,8 +188,8 @@ let resultGamer = new Textarea({
     selector: 'resultGamer'
 })
 
-let outputScorces = new Output({
-    selector: 'result'
+let scores = new Output({
+    selector: 'scores'
 })
 
 let outputTour = new Output({
@@ -219,19 +219,19 @@ let refreshGamer = new ButtonRefresh({
 let counter = new ButtonCounter({
     selector: 'resultCounter',
     input: [resultTour, resultGamer],
-    output: outputScorces
+    output: scores
 })
 
-function refreshTextArea(games, textArea) {
-    let table = ''
-    for (let i = 0; i < games.length; i++) {
-        table += `${teams[games[i][host]]} - ${teams[games[i][guest]]}, ${games[i][goals][0]} - ${games[i][goals][1]}`
-        if (i !== games.length) {
-            table += '\n'
-        }
-    }
-    textArea.value = table
-}
+// function refreshTextArea(games, textArea) {
+//     let table = ''
+//     for (let i = 0; i < games.length; i++) {
+//         table += `${teams[games[i][host]]} - ${teams[games[i][guest]]}, ${games[i][goals][0]} - ${games[i][goals][1]}`
+//         if (i !== games.length) {
+//             table += '\n'
+//         }
+//     }
+//     textArea.value = table
+// }
 
 function checkoutGames(games) {
     /* 
@@ -317,6 +317,31 @@ scores - 6
 Тамбов цска 0-3
 Ростов спартак 1-1
 Зенит химки 2-0
+
+		26	17.04.2021  14:00	
+Ахмат – Химки
+3 : 1	
+26	17.04.2021  16:30	
+Ротор – Динамо М
+0 : 3	
+26	17.04.2021  16:30	
+Локомотив М – Ростов
+4 : 1	
+26	17.04.2021  19:00	
+Краснодар – Зенит
+2 : 2	
+26	18.04.2021  12:00	
+Урал – Рубин
+0 : 1	
+26	18.04.2021  14:00	
+Арсенал – Тамбов
+4 : 0	
+26	18.04.2021  16:30	
+Сочи – ЦСКА
+2 : 1	
+26	18.04.2021  19:00	
+Спартак М – Уфа
+0 : 3
 
 1	Пал_Геннадичъ	142	10
 2	Хрустальная гора	141	6
