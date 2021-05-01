@@ -37,47 +37,41 @@ class Element {
 class Textarea extends Element {
     constructor(options) {
         super(options)
-        // this.$element.addEventListener('paste', () => {
-        //     setTimeout(() => {
-        //         this.games = this.getGames(this.$element)
-        //     }, 1)
-        // })
-
         this.$element.addEventListener('change', () => {
-            this.games = this.getGames(this.$element)
+            this.games = this.parseGames(this.$element)
         })
     }
 
-    getGames(textArea) {
+    parseGames(textArea) {
         if (textArea === undefined) {
             return undefined
         }
-    
-        let games = textArea.value.split('\n')
-            .map((s) => this.getGameResultFromString(s))
-    
-        return checkoutGames(games)
-    }
-    
-    getGameResultFromString(s) {
-        let arr = s.trim()
+
+        let gameResultFromString = (s) => {
+            let arr = s.trim()
             .substring(s.match(/[а-яА-Я]+/).index)
             .split(/[^0-9А-Яа-я]+/)
             .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
             .map(value => {
                 return value.substring(0, 3)
                             .toLowerCase()
-              })
+            })
         
-        let game = {}
+            let game = {}
     
-        game[host] = arr[0]
-        game[guest] = arr[1]
-        game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
-        game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-        game[liter] = game[host] + game[guest]
-        
-        return game
+            game[host] = arr[0]
+            game[guest] = arr[1]
+            game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
+            game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+            game[liter] = game[host] + game[guest]
+            
+            return game
+        }
+    
+        let games = textArea.value.split('\n')
+            .map((s) => gameResultFromString(s))
+    
+        return checkoutGames(games)
     }
 }
 
@@ -103,6 +97,12 @@ class Table extends Element {
         table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
         
         return table
+    }
+}
+
+class Handler {
+    constructor(handler) {
+        this.handler = handler
     }
 }
 
@@ -147,41 +147,44 @@ class ButtonRefresh extends Element {
 class ButtonCounter extends Element {
     constructor(options) {
         super(options)
-        this.tour = options.input[0]
-        this.gamer = options.input[1]
+        this.resultTour = options.input[0]
+        this.forecast = options.input[1]
         this.output = options.output
         this.$element.addEventListener('click', () => {
             try {
-                this.output.$element.innerHTML = this.getScores(this.tour.games, this.gamer.games)
+                this.output.$element.innerHTML = this.calcScorces(this.resultTour.games, this.forecast.games)
             } catch (error) {
                 this.output.$element.innerHTML = 'Uncorrect input data...'
             }
-            
         })
     }
 
-    getScores(tour, gamer) {
+    calcScorces(tour, gamer) {
         let scores = 0
+
+        let compareGames = (gameSource, gameForecast) => {
+            if (gameForecast[goals][0] === gameSource[goals][0] && 
+                gameForecast[goals][1] === gameSource[goals][1]) {
+                return 3
+            } else if (gameForecast[hostWin] === gameSource[hostWin]) {
+                return 1
+            } else {
+                return 0
+            }
+        }
+
         gamer.forEach(game => {
             let gameSource = tour.find(g => g[liter] === game[liter])
-            scores += this.compare(gameSource, game)
+            scores += compareGames(gameSource, game)
         });
         return scores
-    }
-
-    compare(gameSource, game) {
-        if (game[goals][0] === gameSource[goals][0] && game[goals][1] === gameSource[goals][1]) {
-            return 3
-        } else if (game[hostWin] === gameSource[hostWin]) {
-            return 1
-        } else {
-            return 0
-        }
     }
 }
 
 let resultTour = new Textarea({
-    selector: 'resultTour'
+    selector: 'resultTour',
+    event: 'change',
+    handler: {}
 })
 
 let resultGamer = new Textarea({
@@ -221,17 +224,6 @@ let counter = new ButtonCounter({
     input: [resultTour, resultGamer],
     output: scores
 })
-
-// function refreshTextArea(games, textArea) {
-//     let table = ''
-//     for (let i = 0; i < games.length; i++) {
-//         table += `${teams[games[i][host]]} - ${teams[games[i][guest]]}, ${games[i][goals][0]} - ${games[i][goals][1]}`
-//         if (i !== games.length) {
-//             table += '\n'
-//         }
-//     }
-//     textArea.value = table
-// }
 
 function checkoutGames(games) {
     /* 
