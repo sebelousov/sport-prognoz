@@ -23,6 +23,38 @@ const teams = {
     'там': 'Тамбов'
 }
 
+const handlers = [function(textArea) {
+    if (textArea === undefined) {
+        return undefined
+    }
+
+    let gameResultFromString = (s) => {
+        let arr = s.trim()
+        .substring(s.match(/[а-яА-Я]+/).index)
+        .split(/[^0-9А-Яа-я]+/)
+        .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
+        .map(value => {
+            return value.substring(0, 3)
+                        .toLowerCase()
+        })
+    
+        let game = {}
+
+        game[host] = arr[0]
+        game[guest] = arr[1]
+        game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
+        game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+        game[liter] = game[host] + game[guest]
+        
+        return game
+    }
+
+    let games = textArea.value.split('\n')
+        .map((s) => gameResultFromString(s))
+
+    return checkoutGames(games)
+}]
+
 const view = {
     'resultTour': 'showResultTour',
     'resultGamer': 'showResultGamer'
@@ -37,41 +69,9 @@ class Element {
 class Textarea extends Element {
     constructor(options) {
         super(options)
-        this.$element.addEventListener('change', () => {
-            this.games = this.parseGames(this.$element)
+        this.$element.addEventListener(options.event, () => {
+            this.games = options.handler(this.$element)
         })
-    }
-
-    parseGames(textArea) {
-        if (textArea === undefined) {
-            return undefined
-        }
-
-        let gameResultFromString = (s) => {
-            let arr = s.trim()
-            .substring(s.match(/[а-яА-Я]+/).index)
-            .split(/[^0-9А-Яа-я]+/)
-            .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
-            .map(value => {
-                return value.substring(0, 3)
-                            .toLowerCase()
-            })
-        
-            let game = {}
-    
-            game[host] = arr[0]
-            game[guest] = arr[1]
-            game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
-            game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-            game[liter] = game[host] + game[guest]
-            
-            return game
-        }
-    
-        let games = textArea.value.split('\n')
-            .map((s) => gameResultFromString(s))
-    
-        return checkoutGames(games)
     }
 }
 
@@ -97,12 +97,6 @@ class Table extends Element {
         table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
         
         return table
-    }
-}
-
-class Handler {
-    constructor(handler) {
-        this.handler = handler
     }
 }
 
@@ -184,11 +178,13 @@ class ButtonCounter extends Element {
 let resultTour = new Textarea({
     selector: 'resultTour',
     event: 'change',
-    handler: {}
+    handler: handlers[0]
 })
 
 let resultGamer = new Textarea({
-    selector: 'resultGamer'
+    selector: 'resultGamer',
+    event: 'change',
+    handler: handlers[0]
 })
 
 let scores = new Output({
