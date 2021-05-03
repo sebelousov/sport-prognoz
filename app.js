@@ -23,42 +23,75 @@ const teams = {
     'там': 'Тамбов'
 }
 
-const handlers = [function(textArea) {
-    if (textArea === undefined) {
-        return undefined
-    }
+const handlers = [
+    function(textArea) {
+        if (textArea === undefined) {
+            return undefined
+        }
 
-    let gameResultFromString = (s) => {
-        let arr = s.trim()
-        .substring(s.match(/[а-яА-Я]+/).index)
-        .split(/[^0-9А-Яа-я]+/)
-        .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
-        .map(value => {
-            return value.substring(0, 3)
-                        .toLowerCase()
-        })
-    
-        let game = {}
+        let games = textArea.value
+            .split('\n')
+            .filter((element) => /[а-яА-Я]+/.test(element) || /\d+ : \d+/.test(element))
+            .map((element) => element.trim())
+            .map((element, index, gArr) => {
+                return index % 2 === 0 ? element += ` ${gArr[index + 1]}` : element
+            })
+            .filter((element, index) => index % 2 === 0)
+            .map((element) => {
+                return element
+                    .split(/[^0-9А-Яа-я]+/)
+                    .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
+            })
+            .map((element) => {
+                let game = {}
+                
+                game[host] = element[0]
+                    .substring(0, 3)
+                    .toLowerCase()
+                game[guest] = element[1]
+                    .substring(0, 3)
+                    .toLowerCase()
+                game[goals] = [parseInt(element[2]), parseInt(element[3])]
+                game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+                game[liter] = game[host] + game[guest]
+                
+                return game
+            })
 
-        game[host] = arr[0]
-        game[guest] = arr[1]
-        game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
-        game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-        game[liter] = game[host] + game[guest]
+        return checkoutGames(games)
+    },
+    function(textArea) {
+        if (textArea === undefined) {
+            return undefined
+        }
+
+        let gameResultFromString = (s) => {
+            let arr = s.trim()
+            .substring(s.match(/[а-яА-Я]+/).index)
+            .split(/[^0-9А-Яа-я]+/)
+            .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
+            .map(value => {
+                return value.substring(0, 3)
+                            .toLowerCase()
+            })
         
-        return game
+            let game = {}
+
+            game[host] = arr[0]
+            game[guest] = arr[1]
+            game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
+            game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+            game[liter] = game[host] + game[guest]
+            
+            return game
+        }
+
+        let games = textArea.value.split('\n')
+            .map((s) => gameResultFromString(s))
+
+        return checkoutGames(games)
     }
-
-    let games = textArea.value.split('\n')
-        .map((s) => gameResultFromString(s))
-
-    return checkoutGames(games)
-}]
-
-const view = {
-    'resultTour': 'showResultTour',
-    'resultGamer': 'showResultGamer'
-}
+]
 
 class Element {
     constructor(options) {
@@ -184,7 +217,7 @@ let resultTour = new Textarea({
 let resultGamer = new Textarea({
     selector: 'resultGamer',
     event: 'change',
-    handler: handlers[0]
+    handler: handlers[1]
 })
 
 let scores = new Output({
