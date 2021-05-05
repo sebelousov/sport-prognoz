@@ -29,6 +29,12 @@ const handlers = [
             return undefined
         }
 
+        let getTeam = (team) => {
+            return team
+                .substring(0, 3)
+                .toLowerCase()
+        }
+        
         let games = textArea.value
             .split('\n')
             .filter((element) => /[а-яА-Я]+/.test(element) || /\d+ : \d+/.test(element))
@@ -45,12 +51,8 @@ const handlers = [
             .map((element) => {
                 let game = {}
                 
-                game[host] = element[0]
-                    .substring(0, 3)
-                    .toLowerCase()
-                game[guest] = element[1]
-                    .substring(0, 3)
-                    .toLowerCase()
+                game[host] = getTeam(element[0])
+                game[guest] = getTeam(element[1])
                 game[goals] = [parseInt(element[2]), parseInt(element[3])]
                 game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
                 game[liter] = game[host] + game[guest]
@@ -71,8 +73,9 @@ const handlers = [
             .split(/[^0-9А-Яа-я]+/)
             .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
             .map(value => {
-                return value.substring(0, 3)
-                            .toLowerCase()
+                return value
+                    .substring(0, 3)
+                    .toLowerCase()
             })
         
             let game = {}
@@ -90,6 +93,45 @@ const handlers = [
             .map((s) => gameResultFromString(s))
 
         return checkoutGames(games)
+    },
+    function(textArea) {
+        
+        let getTeam = team => team.toLowerCase().substring(0, 3)
+        let games = []
+        let arr = textArea
+            .value
+            .trim()
+            .split(/[^0-9А-Яа-я]+/)
+            .filter((e, index, cArr) => /[А-Яа-я]+/.test(e) || /[А-Яа-я]+/.test(cArr[index - 2]))
+            .filter(e => !(/[А-Яа-я]+/.test(e) && e.length === 1))
+            
+        // for (let i = 0; i < arr.length; i + 4) {
+        //     let game = {}
+        //     game[host] = getTeam(arr[i])
+        //     game[guest] = getTeam(arr[i + 1])
+        //     game[goals] = [parseInt(arr[i + 2]), parseInt(arr[i + 3])]
+        //     game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+        //     game[liter] = game[host] + game[guest]
+
+        //     games.push(game)
+        // }
+        
+            // .forEach((e, index, arr) => {
+            //     if (/[А-Яа-я]+/.test(e)) {
+                    // let game = {}
+
+                    // game[host] = getTeam(arr[index])
+                    // game[guest] = getTeam(arr[index + 1])
+                    // game[goals] = [parseInt(arr[index + 2]), parseInt(arr[index + 3])]
+                    // game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+                    // game[liter] = game[host] + game[guest]
+
+                    // games.push(game)
+            //     }
+            // })
+        
+        console.log(arr)
+        return {}
     }
 ]
 
@@ -211,7 +253,7 @@ class ButtonCounter extends Element {
 let resultTour = new Textarea({
     selector: 'resultTour',
     event: 'change',
-    handler: handlers[0]
+    handler: handlers[2]
 })
 
 let resultGamer = new Textarea({
