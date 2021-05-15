@@ -96,7 +96,22 @@ const handlers = [
     },
     function(textArea) {
         
-        let getTeam = team => team.toLowerCase().substring(0, 3)
+        let getTeam = team => team
+            .toLowerCase()
+            .substring(0, 3)
+        
+        let getGame = (gameArr) => {
+            let game = {}
+            
+            game[host] = getTeam(gameArr[0])
+            game[guest] = getTeam(gameArr[1])
+            game[goals] = [parseInt(gameArr[2]), parseInt(gameArr[3])]
+            game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
+            game[liter] = game[host] + game[guest]
+
+            return game
+        }
+        
         let games = []
         let arr = textArea
             .value
@@ -104,34 +119,14 @@ const handlers = [
             .split(/[^0-9А-Яа-я]+/)
             .filter((e, index, cArr) => /[А-Яа-я]+/.test(e) || /[А-Яа-я]+/.test(cArr[index - 2]))
             .filter(e => !(/[А-Яа-я]+/.test(e) && e.length === 1))
-            
-        // for (let i = 0; i < arr.length; i + 4) {
-        //     let game = {}
-        //     game[host] = getTeam(arr[i])
-        //     game[guest] = getTeam(arr[i + 1])
-        //     game[goals] = [parseInt(arr[i + 2]), parseInt(arr[i + 3])]
-        //     game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-        //     game[liter] = game[host] + game[guest]
+            .map((e, index, gArr) => {
+                if (index % 4 === 0) {
+                    let game = getGame([gArr[index], gArr[index + 1], gArr[index + 2], gArr[index + 3]])
+                    games.push(game)
+                }
+            })
 
-        //     games.push(game)
-        // }
-        
-            // .forEach((e, index, arr) => {
-            //     if (/[А-Яа-я]+/.test(e)) {
-                    // let game = {}
-
-                    // game[host] = getTeam(arr[index])
-                    // game[guest] = getTeam(arr[index + 1])
-                    // game[goals] = [parseInt(arr[index + 2]), parseInt(arr[index + 3])]
-                    // game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-                    // game[liter] = game[host] + game[guest]
-
-                    // games.push(game)
-            //     }
-            // })
-        
-        console.log(arr)
-        return {}
+        return games
     }
 ]
 
@@ -259,7 +254,7 @@ let resultTour = new Textarea({
 let resultGamer = new Textarea({
     selector: 'resultGamer',
     event: 'change',
-    handler: handlers[1]
+    handler: handlers[2]
 })
 
 let scores = new Output({
