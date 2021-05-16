@@ -164,7 +164,7 @@ class Table extends Element {
         let table = value.replaceAll(/\t/g, '[/td][td]')
             .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
         
-        table = '[table]\n' + head + '[tr][td]' + table + '[/td][/tr]' + '\n[/table]' + '\n\nЕсли что не так, пожалуйста, пишите, поправлю.'
+        table = `[table]\n${head}[tr][td]${table}[/td][/tr]\n[/table]\n\nЕсли что не так, пожалуйста, пишите, поправлю.`
         
         return table
     }
@@ -190,13 +190,13 @@ class ButtonRefresh extends Element {
         let table = ''
     
         if (games) {
-            table = '<table>'
+            table = `<table>`
             
             for (let i = 0; i < games.length; i++) {
-                table += '<tr>' + 
-                    '<td>' + teams[games[i][host]] + ' - ' + teams[games[i][guest]] + '</td>' +
-                    '<td>' + games[i][goals][0] + ' - ' + games[i][goals][1] + '</td>' +
-                    '</tr>'
+                table += `<tr>\n
+                    <td>${teams[games[i][host]]} - ${teams[games[i][guest]]}</td>
+                    <td>${games[i][goals][0]} - ${games[i][goals][1]}</td>
+                    </tr>\n`
             }
             
             table += '</table>'
