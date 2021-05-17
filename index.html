@@ -13,46 +13,42 @@
     
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container-field">
       <div class="row">
         <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <h1>Расчет результатов</h1>
+          <h1>Расчет результатов за <span id="tourNumber"></span> тур.</h1>
         </div>
       </div>
-      <div class="row">
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <textarea rows="8" cols="100" wrap="soft" id="resultTour" autofocus tabindex="1"></textarea>
+      <div class="row p-3 mb-2 shadow-none bg-light rounded">
+        <div class="col">
+          <div class="row">
+            <textarea rows="8" cols="50" wrap="soft" id="resultTour" autofocus tabindex="1" style="margin-left: auto; margin-right: 0;"></textarea>
+          </div>
+          <div class="row">
+            <button type="button" class="btn btn-info" id="refreshResultTour" style="margin-left: auto; margin-right: 0;">&gt;&gt;&gt;</button>
+          </div>
         </div>
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <button type="button" class="btn btn-info" id="refreshResultTour">>>></button>
+        <div class="col">
+          <div class="row">
+            <div class="col" id="showResultTour">No input dates...</div>
+            <div class="col" id="showResultGamer">No input dates...</div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p>Итого: <span id="scores">0</span></p>
+            </div>
+          </div>
         </div>
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <div id="showResultTour">No input dates...</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <textarea rows="8" cols="100" wrap="soft" id="resultGamer" tabindex="2"></textarea>
-        </div>
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <button type="button" class="btn btn-info" id="refreshResultGamer">>>></button>
-        </div>
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <div id="showResultGamer">No input dates...</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <button type="button" class="btn btn-info" id="resultCounter" tabindex="3">Start!</button>
+        <div class="col">
+          <div class="row">
+            <textarea rows="8" cols="50" wrap="soft" id="resultGamer" tabindex="2"></textarea>
+          </div>
+          <div class="row">
+            <button type="button" class="btn btn-info" id="refreshResultGamer">&lt;&lt;&lt;</button>
+          </div>
         </div>
       </div>
       
-      <div class="row">
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <p id="scores">0</p>
-        </div>
-      </div>
-
       <div class="row">
         <div class="col p-3 mb-2 shadow-none bg-light rounded">
           <textarea rows="8" cols="100" wrap="soft" id="tableFormat" tabindex="4"></textarea>

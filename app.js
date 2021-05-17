@@ -113,7 +113,7 @@ const handlers = [
         }
         
         let games = []
-        let arr = textArea
+        textArea
             .value
             .trim()
             .split(/[^0-9А-Яа-я]+/)
@@ -182,29 +182,8 @@ class ButtonRefresh extends Element {
         this.input = options.input[0]
         this.output = options.output
         this.$element.addEventListener('click', () => {
-            this.showGames(this.input.games, this.output.$element)
+            Printer.showGames(this.input.games, this.output.$element)
         })
-    }
-
-    showGames(games, output) {
-        let table = ''
-    
-        if (games) {
-            table = `<table>`
-            
-            for (let i = 0; i < games.length; i++) {
-                table += `<tr>\n
-                    <td>${teams[games[i][host]]} - ${teams[games[i][guest]]}</td>
-                    <td>${games[i][goals][0]} - ${games[i][goals][1]}</td>
-                    </tr>\n`
-            }
-            
-            table += '</table>'
-        } else {
-            table = 'Uncorrect input data...'
-        }
-    
-        output.innerHTML = table
     }
 }
 
@@ -224,6 +203,54 @@ class ButtonCounter extends Element {
     }
 
     calcScorces(tour, gamer) {
+        let scores = 0
+
+        let compareGames = (gameSource, gameForecast) => {
+            if (gameForecast[goals][0] === gameSource[goals][0] && 
+                gameForecast[goals][1] === gameSource[goals][1]) {
+                return 3
+            } else if (gameForecast[hostWin] === gameSource[hostWin]) {
+                return 1
+            } else {
+                return 0
+            }
+        }
+
+        gamer.forEach(game => {
+            let gameSource = tour.find(g => g[liter] === game[liter])
+            scores += compareGames(gameSource, game)
+        });
+        return scores
+    }
+}
+
+class Forecast {
+    constructor(games) {
+        this.games = games
+    }
+}
+
+class Printer {
+    static showGames(games, output) {
+        let table = ''
+    
+        if (games) {
+            for (let i = 0; i < games.length; i++) {
+                table += `<div class="row">
+                    <div class="col">${teams[games[i][host]]} - ${teams[games[i][guest]]}</div>
+                    <div class="col">${games[i][goals][0]} - ${games[i][goals][1]}</div>
+                    </div>\n`
+            }
+        } else {
+            table = 'Uncorrect input data...'
+        }
+    
+        output.innerHTML = table
+    }
+}
+
+class Calculator {
+    static calculate(tour, gamer) {
         let scores = 0
 
         let compareGames = (gameSource, gameForecast) => {
@@ -359,8 +386,8 @@ function addTags(string, tag) {
 scores - 6
 
 23   17.03.2021  18:00   Ротор – Ростов                0:1     
-23   17.03.2021  20:00   ЦСКА – Зенит                  1:1
 23   17.03.2021  20:00   Ахмат – Арсенал             2:1
+23   17.03.2021  20:00   ЦСКА – Зенит                  1:1
 23   18.03.2021  17:00   Уфа – Локомотив М         0:1
 23   18.03.2021  19:00   Краснодар – Динамо М    1:0
 23   18.03.2021  19:00   Спартак М – Урал            2:0
