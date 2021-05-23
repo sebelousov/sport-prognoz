@@ -4,8 +4,8 @@ const hostWin = 'hostWin'
 const liter = 'liter'
 const goals = 'goals'
 
-const teams = {
-    'рот': 'Ротор', 
+const listTeams = {
+    'rpl': {'рот': 'Ротор', 
     'рос': 'Ростов', 
     'цск': 'ЦСКА', 
     'зен': 'Зенит', 
@@ -20,8 +20,11 @@ const teams = {
     'руб': 'Рубин', 
     'хим': 'Химки', 
     'соч': 'Сочи', 
-    'там': 'Тамбов'
+    'там': 'Тамбов'}, 
+    'euro': {}
 }
+
+const teams = listTeams['rpl']
 
 const handlers = [
     function(textArea) {
@@ -246,6 +249,12 @@ class Printer {
         }
     
         output.innerHTML = table
+    }
+}
+
+class Reader {
+    constructor() {
+        
     }
 }
 
