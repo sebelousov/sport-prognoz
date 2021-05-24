@@ -32,3 +32,57 @@
 // let keys = map.keys()
 // keys.push('more')
 // console.log(keys)
+
+// let salaries = {
+//     'John': 100,
+//     'Pete': 300,
+//     'Mary': 250
+// }
+
+// let sumSalaries = (salaries) => {
+//     return Object.values(salaries)
+//         .reduce((acc, value) => acc + value, 0)
+// }
+
+// console.log(sumSalaries(salaries))
+
+// let user = {
+//     name: 'John',
+//     age: 30
+// }
+
+// let count = user => Object.keys(user).length
+
+// console.log(count(user))
+
+// let user = {
+//     name: 'John',
+//     age: 30
+// }
+
+// let {name, age, isAdmin = false} = user
+
+// console.log(name)
+// console.log(age)
+// console.log(isAdmin)
+
+let salaries = {
+    'John': 100,
+    'Pete': 300,
+    'Mary': 250
+}
+
+let topSalary = (salaries) => {
+    let maxSalary = Math.max(...Object.values(salaries))
+    
+    for (let [key, value] of Object.entries(salaries)) {
+        if (maxSalary === value) {
+            return key
+        }
+    }
+
+    return null
+}
+
+console.log(topSalary({}))
+console.log(topSalary(salaries))
