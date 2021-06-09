@@ -3,74 +3,72 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" /> -->
     <link rel="stylesheet" href="style.css" />
 
     <title>Расчет результатов турнира прогнозистов</title>
     
   </head>
   <body>
-    <div class="container-field">
-      <div class="row">
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <h1>Расчет результатов за <span id="tourNumber"></span> тур.</h1>
-        </div>
+    <div class="container">
+      <div id="header">
+        <h1>Расчет результатов за <span id="tourNumber"></span> тур.</h1>
       </div>
-      <div class="row p-3 mb-2 shadow-none bg-light rounded">
-        <div class="col">
-          <div class="row">
-            <textarea rows="8" cols="50" wrap="soft" id="resultTour" autofocus tabindex="1" style="margin-left: auto; margin-right: 0;"></textarea>
+      <div class="main row">
+        <div class="textarea-right">
+          <div>
+            <textarea wrap="soft" id="resultTour" autofocus tabindex="1"></textarea>
           </div>
-          <div class="row">
-            <button type="button" class="btn btn-info" id="refreshResultTour" style="margin-left: auto; margin-right: 0;">&gt;&gt;&gt;</button>
+          <div>
+            <button type="button" id="refreshResultTour">&gt;&gt;&gt;</button>
           </div>
         </div>
-        <div class="col">
+
+        <div class="center-table col">
           <div class="row">
-            <div class="col" id="showResultTour">No input dates...</div>
-            <div class="col" id="showResultGamer">No input dates...</div>
+            <div class="width50" id="showResultTour">No input dates...</div>
+            <div class="width50" id="showResultGamer">No input dates...</div>
           </div>
-          <div class="row">
-            <div class="col">
+          <div>
+            <div>
               <p>Итого: <span id="scores">0</span></p>
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="row">
-            <textarea rows="8" cols="50" wrap="soft" id="resultGamer" tabindex="2"></textarea>
+
+        <div class="textarea-left col">
+          <div>
+            <textarea wrap="soft" id="resultGamer" tabindex="2"></textarea>
           </div>
-          <div class="row">
-            <button type="button" class="btn btn-info" id="refreshResultGamer">&lt;&lt;&lt;</button>
+          <div>
+            <button type="button" id="refreshResultGamer">&lt;&lt;&lt;</button>
           </div>
         </div>
       </div>
       
-      <div class="row">
-        <div class="col p-3 mb-2 shadow-none bg-light rounded">
-          <textarea rows="8" cols="100" wrap="soft" id="tableFormat" tabindex="4"></textarea>
-        </div>
+      <div>
+        <textarea wrap="soft" id="tableFormat" tabindex="4"></textarea>
       </div>
     </div>
 
     <noscript>
-      <div class="container">
-      <div class="row justify-content-start">
-        <div class="col align-self-start">
-          For start app run javascript in browser...
+      <div>
+        <div>
+          <div>
+            For start app run javascript in browser...
+          </div>
         </div>
       </div>
-    </div>
     </noscript>
     
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> -->
     <!--  Project -->
     <script src="app.js"></script>
       

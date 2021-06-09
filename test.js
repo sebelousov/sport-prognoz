@@ -66,23 +66,29 @@
 // console.log(age)
 // console.log(isAdmin)
 
-let salaries = {
-    'John': 100,
-    'Pete': 300,
-    'Mary': 250
-}
+// let salaries = {
+//     'John': 100,
+//     'Pete': 300,
+//     'Mary': 250
+// }
 
-let topSalary = (salaries) => {
-    let maxSalary = Math.max(...Object.values(salaries))
+// let topSalary = (salaries) => {
+//     let maxSalary = Math.max(...Object.values(salaries))
     
-    for (let [key, value] of Object.entries(salaries)) {
-        if (maxSalary === value) {
-            return key
-        }
-    }
+//     for (let [key, value] of Object.entries(salaries)) {
+//         if (maxSalary === value) {
+//             return key
+//         }
+//     }
 
-    return null
-}
+//     return null
+// }
 
-console.log(topSalary({}))
-console.log(topSalary(salaries))
+// console.log(topSalary({}))
+// console.log(topSalary(salaries))
+
+let date = new Date(Date.parse('2012-02-20T03:12Z+03:00'))
+let now = new Date()
+
+console.log(date)
+console.log(now)

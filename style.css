@@ -1,4 +1,64 @@
+html {
+  font-size: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  background-color: #00bfff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  width: 5rem;
+  height: 2rem;
+}
+
 h1 {
     font-size: 3rem;
-    color: #000;
-  }
+    color: #004d66;
+}
+
+textarea {
+  box-sizing: border-box;
+  border: 1px solid #00bfff;
+  border-radius: 5px;
+  height: 15rem;
+  width: 100%;
+}
+
+textarea:focus {
+  outline: none !important;
+  border-color: #00bfff;
+}
+
+.main {
+  height: 20rem;
+  width: 100%;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.textarea-right, .textarea-left, .center-table {
+  padding: 1rem;
+  width: 33%;
+}
+
+.textarea-right {
+  text-align: right;
+}
+
+.width50 {
+  width: 50%;
+}
