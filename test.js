@@ -119,35 +119,46 @@
 
 // console.log(Array.from(range))
 
-async function* fetchCommits(repo) {
-    let url = `https://api.github.com/repos/${repo}/commits`
+// async function* fetchCommits(repo) {
+//     let url = `https://api.github.com/repos/${repo}/commits`
 
-    while (url) {
-        const response = await fetch(url, {
-            headers: {'User-Agent': 'Our-script'}
-        })
+//     while (url) {
+//         const response = await fetch(url, {
+//             headers: {'User-Agent': 'Our-script'}
+//         })
 
-        const body = await response.json()
+//         const body = await response.json()
 
-        let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/)
-        nextPage = nextPage && nextPage[1]
+//         let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/)
+//         nextPage = nextPage && nextPage[1]
 
-        url = nextPage
+//         url = nextPage
 
-        for (let commit of body) {
-            yield commit
-        }
+//         for (let commit of body) {
+//             yield commit
+//         }
+//     }
+// }
+
+// (async () => {
+//     let count = 0
+
+//     for await (const commit of fetchCommits('sebelousov/advego')) {
+//         console.log(commit.author.login)
+
+//         if (++count == 100) {
+//             break
+//         }
+//     }
+// })()
+
+let getValue = value => value
+let arr = [1, 2, 3, 4]
+
+let get = arr => {
+    let obj = {
+        1: 
     }
 }
 
-(async () => {
-    let count = 0
-
-    for await (const commit of fetchCommits('sebelousov/advego')) {
-        console.log(commit.author.login)
-
-        if (++count == 100) {
-            break
-        }
-    }
-})()
+console.log(getValue(1))

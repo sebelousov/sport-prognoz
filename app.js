@@ -5,26 +5,59 @@ const liter = 'liter'
 const goals = 'goals'
 
 const listTeams = {
-    'rpl': {'рот': 'Ротор', 
-    'рос': 'Ростов', 
-    'цск': 'ЦСКА', 
-    'зен': 'Зенит', 
-    'ахм': 'Ахмат', 
-    'арс': 'Арсенал', 
-    'уфа': 'Уфа', 
-    'лок': 'Локомотив М', 
-    'кра': 'Краснодар', 
-    'дин': 'Динамо М', 
-    'спа': 'Спартак М', 
-    'ура': 'Урал', 
-    'руб': 'Рубин', 
-    'хим': 'Химки', 
-    'соч': 'Сочи', 
-    'там': 'Тамбов'}, 
-    'euro': {}
+    'rpl': {
+        'рот': 'Ротор', 
+        'рос': 'Ростов', 
+        'цск': 'ЦСКА', 
+        'зен': 'Зенит', 
+        'ахм': 'Ахмат', 
+        'арс': 'Арсенал', 
+        'уфа': 'Уфа', 
+        'лок': 'Локомотив М', 
+        'кра': 'Краснодар', 
+        'дин': 'Динамо М', 
+        'спа': 'Спартак М', 
+        'ура': 'Урал', 
+        'руб': 'Рубин', 
+        'хим': 'Химки', 
+        'соч': 'Сочи', 
+        'там': 'Тамбов'
+    }, 
+    'euro': {
+        'турц': 'Турция',
+        'итал': 'Италия',
+        'уэль': 'Уэльс',
+        'швей': 'Швейцария',
+        'дани': 'Дания',
+        'финл': 'Финляндия',
+        'бель': 'Бельгия',
+        'росс': 'Россия',
+        'англ': 'Англия',
+        'хорв': 'Хорватия',
+        'авст': 'Австрия',
+        'севе': 'Северная Македония',
+        'ниде': 'Нидерланды',
+        'укра': 'Украина',
+        'шотл': 'Шотландия',
+        'чехи': 'Чехия',
+        'поль': 'Польша',
+        'слов': 'Словакия',
+        'испа': 'Испания',
+        'швец': 'Швеция',
+        'венг': 'Венгрия',
+        'порт': 'Португалия',
+        'фран': 'Франция',
+        'герм': 'Германия'
+    }
 }
 
-const teams = listTeams['rpl']
+const teams = listTeams['euro']
+
+const doubleNames = {
+    'Северная': teams['сев']
+}
+
+const deleteNames = ['/Группа [ABCDEF]/g', '/Македония/g']
 
 const handlers = [
     function(textArea) {
@@ -99,9 +132,13 @@ const handlers = [
     },
     function(textArea) {
         
-        let getTeam = team => team
-            .toLowerCase()
-            .substring(0, 3)
+        let getTeam = team => {
+            return team.length === 3 ? 
+                team.toLowerCase()
+                    .substring(0, 3) : 
+                team.toLowerCase()
+                    .substring(0, 4)
+        }
         
         let getGame = (gameArr) => {
             let game = {}
@@ -114,20 +151,27 @@ const handlers = [
 
             return game
         }
-        
+
         let games = []
-        textArea
+        
+        let temp = textArea
             .value
             .trim()
+            .replaceAll(/Группа [ABCDEF]/g)
+            .replaceAll(/Македония/g)
             .split(/[^0-9А-Яа-я]+/)
             .filter((e, index, cArr) => /[А-Яа-я]+/.test(e) || /[А-Яа-я]+/.test(cArr[index - 2]))
-            .filter(e => !(/[А-Яа-я]+/.test(e) && e.length === 1))
+            //.filter(e => !(/[А-Яа-я]+/.test(e) && e.length === 1))
             .map((e, index, gArr) => {
                 if (index % 4 === 0) {
                     let game = getGame([gArr[index], gArr[index + 1], gArr[index + 2], gArr[index + 3]])
                     games.push(game)
                 }
             })
+        
+
+
+        console.log(games)
 
         return games
     }
