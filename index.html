@@ -1,87 +1,98 @@
-<div class="container">
-  <h1>Расчет результатов за <span id="tourNumber"></span> тур.</h1>
-  <div class="row">
-    <div class="col">
-      <div class="row">
-        <div class="col form-floating">
-          <textarea class="form-control" placeholder="Leave a comment here" id="resultTour" tabindex="1"></textarea>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-end">
-          <button type="button" class="btn btn-light" id="refreshResultTour">&gt;&gt;&gt;</button>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col">
-      <div class="row">
-        <div class="col form-floating">
-          <textarea class="form-control" placeholder="Leave a comment here" id="resultGamer" tabindex="2"></textarea>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расчет результатов</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Расчет результатов за <span id="tourNumber"></span> тур.</h1>
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-light" id="refreshResultGamer">&lt;&lt;&lt;</button>
+          <div class="row">
+            <div class="col form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" id="resultTour" tabindex="1"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-end">
+              <button type="button" class="btn btn-light" id="refreshResultTour">&gt;&gt;&gt;</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col">
+          <div class="row">
+            <div class="col form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" id="resultGamer" tabindex="2"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-light" id="refreshResultGamer">&lt;&lt;&lt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <header>
+            <h2>Результат тура</h2>
+          </header>
+          <div id="showResultTour">No input dates...</div>
+        </div>
+        <div class="col">
+          <header>
+            <h2>Прогноз игрока</h2>
+          </header><div id="showResultGamer">No input dates...</div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-light" id="resultCounter">Считать</button>
+          <p>Итого: <span id="scores">0</span></p>
+        </div>
+        <div class="col">
+          
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="tableFormat" tabindex="4"></textarea>
+          </div>
+          
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="format-table" id="scores-table" checked>
+            <label class="form-check-label" for="scores-table">
+              Format the scores table
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="format-table" id="result-table">
+            <label class="form-check-label" for="result-table">
+              Format the result table
+            </label>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   
-  <div class="row">
-    <div class="col">
-      <header>
-        <h2>Результат тура</h2>
-      </header>
-      <div id="showResultTour">No input dates...</div>
-    </div>
-    <div class="col">
-      <header>
-        <h2>Прогноз игрока</h2>
-      </header><div id="showResultGamer">No input dates...</div>
-    </div>
-  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
   
-  <div class="row">
-    <div class="col">
-      <button type="button" class="btn btn-light" id="resultCounter">Считать</button>
-      <p>Итого: <span id="scores">0</span></p>
-    </div>
-    <div class="col">
-      
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col">
-      <div class="form-floating">
-        <textarea class="form-control" placeholder="Leave a comment here" id="tableFormat" tabindex="4"></textarea>
-      </div>
-      
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="format-table" id="scores-table" checked>
-        <label class="form-check-label" for="scores-table">
-          Format the scores table
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="format-table" id="result-table">
-        <label class="form-check-label" for="result-table">
-          Format the result table
-        </label>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-
-<noscript>
-  <div>
-    <div>
+    <noscript>
       <div>
-        For start app run javascript in browser...
+        <div>
+          <div>
+            For start app run javascript in browser...
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</noscript>
+    </noscript>
+  </body>
+</html>
