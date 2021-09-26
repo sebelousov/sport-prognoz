@@ -155,10 +155,6 @@
 let getValue = value => value
 let arr = [1, 2, 3, 4]
 
-let get = arr => {
-    let obj = {
-        1: 
-    }
-}
+
 
 console.log(getValue(1))

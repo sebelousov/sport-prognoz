@@ -3,9 +3,25 @@ const guest = 'guest'
 const hostWin = 'hostWin'
 const liter = 'liter'
 const goals = 'goals'
+const tourNumber = document.getElementById('tourNumber')
+const league = 'rpl2021'
+
+const formatTable = {state: true};
+
+const radios = document.querySelectorAll('input[type=radio]')
+radios.forEach((radio) => {
+  radio.addEventListener('change', () => {
+    formatTable.state = !formatTable.state
+  })
+})
+
+const abbreviated = {
+  'кс': 'кры',
+  'нн': 'ниж'
+}
 
 const listTeams = {
-    'rpl': {
+    'rpl2020': {
         'рот': 'Ротор', 
         'рос': 'Ростов', 
         'цск': 'ЦСКА', 
@@ -22,6 +38,24 @@ const listTeams = {
         'хим': 'Химки', 
         'соч': 'Сочи', 
         'там': 'Тамбов'
+    }, 
+    'rpl2021': {
+        'рос': 'Ростов', 
+        'цск': 'ЦСКА', 
+        'зен': 'Зенит', 
+        'ахм': 'Ахмат', 
+        'арс': 'Арсенал', 
+        'уфа': 'Уфа', 
+        'лок': 'Локомотив М', 
+        'кра': 'Краснодар', 
+        'дин': 'Динамо М', 
+        'спа': 'Спартак М', 
+        'ура': 'Урал', 
+        'руб': 'Рубин', 
+        'хим': 'Химки', 
+        'соч': 'Сочи',
+        'ниж': 'Нижний Новгород',
+        'кры': 'Крылья Советов',
     }, 
     'euro': {
         'турц': 'Турция',
@@ -51,93 +85,13 @@ const listTeams = {
     }
 }
 
-const teams = listTeams['euro']
-
-const doubleNames = {
-    'Северная': teams['сев']
-}
-
-const deleteNames = ['/Группа [ABCDEF]/g', '/Македония/g']
+const teams = listTeams[league]
 
 const handlers = [
     function(textArea) {
-        if (textArea === undefined) {
-            return undefined
-        }
-
-        let getTeam = (team) => {
-            return team
-                .substring(0, 3)
-                .toLowerCase()
-        }
-        
-        let games = textArea.value
-            .split('\n')
-            .filter((element) => /[а-яА-Я]+/.test(element) || /\d+ : \d+/.test(element))
-            .map((element) => element.trim())
-            .map((element, index, gArr) => {
-                return index % 2 === 0 ? element += ` ${gArr[index + 1]}` : element
-            })
-            .filter((element, index) => index % 2 === 0)
-            .map((element) => {
-                return element
-                    .split(/[^0-9А-Яа-я]+/)
-                    .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
-            })
-            .map((element) => {
-                let game = {}
-                
-                game[host] = getTeam(element[0])
-                game[guest] = getTeam(element[1])
-                game[goals] = [parseInt(element[2]), parseInt(element[3])]
-                game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-                game[liter] = game[host] + game[guest]
-                
-                return game
-            })
-
-        return checkoutGames(games)
-    },
-    function(textArea) {
-        if (textArea === undefined) {
-            return undefined
-        }
-
-        let gameResultFromString = (s) => {
-            let arr = s.trim()
-            .substring(s.match(/[а-яА-Я]+/).index)
-            .split(/[^0-9А-Яа-я]+/)
-            .filter(value => value.length > 1 || /^-?[\d.]+(?:e-?\d+)?$/.test(value))
-            .map(value => {
-                return value
-                    .substring(0, 3)
-                    .toLowerCase()
-            })
-        
-            let game = {}
-
-            game[host] = arr[0]
-            game[guest] = arr[1]
-            game[goals] = [parseInt(arr[2]), parseInt(arr[3])]
-            game[hostWin] = game[goals][0] > game[goals][1] ? 1 : game[goals][0] === game[goals][1] ? 0 : -1
-            game[liter] = game[host] + game[guest]
-            
-            return game
-        }
-
-        let games = textArea.value.split('\n')
-            .map((s) => gameResultFromString(s))
-
-        return checkoutGames(games)
-    },
-    function(textArea) {
-        
         let getTeam = team => {
-            return team.length === 3 ? 
-                team.toLowerCase()
-                    .substring(0, 3) : 
-                team.toLowerCase()
-                    .substring(0, 4)
+            return team.toLowerCase()
+                .substring(0, 3)
         }
         
         let getGame = (gameArr) => {
@@ -151,17 +105,38 @@ const handlers = [
 
             return game
         }
+        
+        const deleteDoubleNames = (value) => {
+          const doubleNames = () => {
+            let out = []
 
+            for (let [team, value] of Object.entries(teams)) {
+              if (value.includes(' ')) {
+                out.push(value.substring(value.indexOf(' ')))
+              }
+            }
+            return out
+          }
+
+          doubleNames().forEach(e => {
+            value = value.replaceAll(e, '')
+          })
+
+          return value
+        }
+        
         let games = []
         
-        let temp = textArea
-            .value
+        deleteDoubleNames(textArea.value)
             .trim()
-            .replaceAll(/Группа [ABCDEF]/g)
-            .replaceAll(/Македония/g)
-            .split(/[^0-9А-Яа-я]+/)
-            .filter((e, index, cArr) => /[А-Яа-я]+/.test(e) || /[А-Яа-я]+/.test(cArr[index - 2]))
-            //.filter(e => !(/[А-Яа-я]+/.test(e) && e.length === 1))
+            .split(/[^0-9А-Яа-я]+/ig)
+            .filter((e, index, arr) => 
+                    /[А-Яа-я]+/ig.test(e) || 
+                    (/\d+/.test(e) && 
+                       (/[А-Яа-я]+/ig.test(arr[index - 1]) || 
+                        /[А-Яа-я]+/ig.test(arr[index - 2]))))
+            .map((e) => e.substring(0, 3).toLowerCase())
+            .map((e) => Object.keys(abbreviated).includes(e) ? abbreviated[e] : e)
             .map((e, index, gArr) => {
                 if (index % 4 === 0) {
                     let game = getGame([gArr[index], gArr[index + 1], gArr[index + 2], gArr[index + 3]])
@@ -169,12 +144,10 @@ const handlers = [
                 }
             })
         
-
-
-        console.log(games)
-
-        return games
-    }
+        return games.sort((a, b) => {
+          return a.host > b.host ? 1 : a.host < b.host ? -1 : 0
+        })
+  }
 ]
 
 class Element {
@@ -183,26 +156,30 @@ class Element {
     }
 }
 
-class Textarea extends Element {
-    constructor(options) {
-        super(options)
-        this.$element.addEventListener(options.event, () => {
-            this.games = options.handler(this.$element)
-        })
-    }
-}
-
 class Table extends Element {
     constructor(options) {
         super(options)
+        
         this.$element.addEventListener('paste', () => {
             setTimeout(() => {
                 this.$element.value = this.formatTable(this.$element.value)
             }, 1)
         })
+        
+        this.$element.addEventListener('blur', (event) => {
+            event.target.value = ''
+        })
     }
 
     formatTable(value) {
+      if (formatTable.state) {
+        return this.formatResultTable(value)    
+      } else {
+        return this.formatScoresTable(value)
+      }
+    }
+  
+    formatResultTable(value) {
         if (!value) {
             return -1
         }
@@ -215,11 +192,21 @@ class Table extends Element {
         
         return table
     }
-}
-
-class Output extends Element {
-    constructor(options) {
-        super(options)
+  
+    formatScoresTable(value) {
+      let result = ''
+      let size = 4
+      let array = value.trim()
+          .replaceAll('\n', '\t')
+          .split('\t')
+          .filter(e => e != '')
+      
+      while (array.length > 0) {
+        result += array.splice(0, size).join('\t') + '\n'
+      }
+      
+      return result
+      
     }
 }
 
@@ -227,9 +214,17 @@ class ButtonRefresh extends Element {
     constructor(options) {
         super(options)
         this.input = options.input[0]
-        this.output = options.output
+        this.output = [options.output[0]]
+        this.reader = options.reader
+        this.source = options.source
+        
         this.$element.addEventListener('click', () => {
-            Printer.showGames(this.input.games, this.output.$element)
+            if (this.source) {
+                
+            }
+            
+            this.input.games = this.reader.read(this.input.$element)
+            Printer.showGames(this.input.games, this.output[0].$element)
         })
     }
 }
@@ -239,35 +234,16 @@ class ButtonCounter extends Element {
         super(options)
         this.resultTour = options.input[0]
         this.forecast = options.input[1]
-        this.output = options.output
+        this.output = [options.output[0], options.output[1]]
+        
         this.$element.addEventListener('click', () => {
             try {
-                this.output.$element.innerHTML = this.calcScorces(this.resultTour.games, this.forecast.games)
+                this.output[0].$element.innerHTML = Calculator.calculate(this.resultTour.games, this.forecast.games)
+                Printer.showGames(this.forecast.games, this.output[1].$element)
             } catch (error) {
                 this.output.$element.innerHTML = 'Uncorrect input data...'
             }
         })
-    }
-
-    calcScorces(tour, gamer) {
-        let scores = 0
-
-        let compareGames = (gameSource, gameForecast) => {
-            if (gameForecast[goals][0] === gameSource[goals][0] && 
-                gameForecast[goals][1] === gameSource[goals][1]) {
-                return 3
-            } else if (gameForecast[hostWin] === gameSource[hostWin]) {
-                return 1
-            } else {
-                return 0
-            }
-        }
-
-        gamer.forEach(game => {
-            let gameSource = tour.find(g => g[liter] === game[liter])
-            scores += compareGames(gameSource, game)
-        });
-        return scores
     }
 }
 
@@ -279,26 +255,59 @@ class Forecast {
 
 class Printer {
     static showGames(games, output) {
-        let table = ''
-    
+        let table = `<table class="table table-striped table-hover">`
+        
+        const addClasses = (scores) => {
+            let className = ''
+            
+            if (scores === 3) {
+                className += 'badge rounded-pill bg-success'
+            } else if (scores === 1) {
+                className += 'badge rounded-pill bg-primary'
+            } else {
+                className += 'badge rounded-pill bg-danger'
+            }
+            
+            return className
+        }
+        
+        const addCol = (scores) => {
+            if (scores === 3) {
+                return `<td><span class='${addClasses(scores)}'>+3</span></td>`
+            } else if (scores === 1) {
+                return `<td><span class='${addClasses(scores)}'>+1</span></td>`
+            } else if (scores === 0) {
+                return `<td><span class='${addClasses(scores)}'>--</span></td>`
+            } else {
+                return ''
+            }
+        }
+        
         if (games) {
             for (let i = 0; i < games.length; i++) {
-                table += `<div class="row">
-                    <div class="col">${teams[games[i][host]]} - ${teams[games[i][guest]]}</div>
-                    <div class="col">${games[i][goals][0]} - ${games[i][goals][1]}</div>
-                    </div>\n`
+                table += `<tr">
+                    <td>${teams[games[i][host]]} - ${teams[games[i][guest]]}</td>
+                    <td>${games[i][goals][0]} - ${games[i][goals][1]}</td>
+                    ${addCol(games[i].scores)}
+                    </tr>\n`
             }
         } else {
             table = 'Uncorrect input data...'
         }
+        
+        table += '</table>'
     
         output.innerHTML = table
     }
 }
 
 class Reader {
-    constructor() {
-        
+    constructor(handler) {
+        this.handler = handler
+    }
+    
+    read(input) {
+        return this.handler(input)
     }
 }
 
@@ -309,11 +318,14 @@ class Calculator {
         let compareGames = (gameSource, gameForecast) => {
             if (gameForecast[goals][0] === gameSource[goals][0] && 
                 gameForecast[goals][1] === gameSource[goals][1]) {
-                return 3
+                gameForecast['scores'] = 3
+                return gameForecast['scores']
             } else if (gameForecast[hostWin] === gameSource[hostWin]) {
-                return 1
+                gameForecast['scores'] = 1
+                return gameForecast['scores']
             } else {
-                return 0
+                gameForecast['scores'] = 0
+                return gameForecast['scores']
             }
         }
 
@@ -325,27 +337,23 @@ class Calculator {
     }
 }
 
-let resultTour = new Textarea({
-    selector: 'resultTour',
-    event: 'change',
-    handler: handlers[2]
+let resultTour = new Element({
+    selector: 'resultTour'
 })
 
-let resultGamer = new Textarea({
-    selector: 'resultGamer',
-    event: 'change',
-    handler: handlers[2]
+let resultGamer = new Element({
+    selector: 'resultGamer'
 })
 
-let scores = new Output({
+let scores = new Element({
     selector: 'scores'
 })
 
-let outputTour = new Output({
+let outputTour = new Element({
     selector: 'showResultTour'
 })
 
-let outputGamer = new Output({
+let outputGamer = new Element({
     selector: 'showResultGamer'
 })
 
@@ -356,20 +364,26 @@ let table = new Table({
 let refreshTour = new ButtonRefresh({
     selector: 'refreshResultTour',
     input: [resultTour],
-    output: outputTour
+    output: [outputTour],
+    reader: new Reader(handlers[0]),
+    source: tourNumber
 })
 
 let refreshGamer = new ButtonRefresh({
     selector: 'refreshResultGamer',
     input: [resultGamer],
-    output: outputGamer
+    output: [outputGamer],
+    reader: new Reader(handlers[0]),
+    source: null
 })
 
 let counter = new ButtonCounter({
     selector: 'resultCounter',
     input: [resultTour, resultGamer],
-    output: scores
+    output: [scores, outputGamer]
 })
+
+
 
 function checkoutGames(games) {
     /* 
@@ -399,7 +413,6 @@ function addTags(string, tag) {
 26   18.04.2021  14:00   Арсенал – Тамбов   4 : 0   
 26   18.04.2021  16:30   Сочи – ЦСКА   2 : 1   
 26   18.04.2021  19:00   Спартак М – Уфа   0 : 3
-
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
 21   06.03.2021  16:30   Ротор – Химки   1 : 1   
 21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
@@ -408,7 +421,6 @@ function addTags(string, tag) {
 21   07.03.2021  19:00   Спартак М – Краснодар   1 : 2
 21   08.03.2021  14:00   Арсенал – Локомотив М   0 : 2   
 21   08.03.2021  16:30   Рубин – Зенит   1 : 2
-
 21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
 21   06.03.2021  16:30   Ротор – Химки   1 : 1   
 21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
@@ -426,7 +438,6 @@ function addTags(string, tag) {
 23   18.03.2021  19:00   Спартак М – Урал   5 : 1   
 23   19.03.2021  19:00   Рубин – Химки   1 : 3   
 23   19.03.2021  19:00   Сочи – Тамбов   5 : 0
-
 23   17.03.2021  18:00   Ротор – Ростов   0 : 1   
 23   17.03.2021  20:00   ЦСКА – Зенит   1 : 2   
 23   17.03.2021  20:00   Ахмат – Арсенал   2 : 1   
@@ -435,9 +446,7 @@ function addTags(string, tag) {
 23   18.03.2021  19:00   Спартак М – Урал   2 : 1
 23   19.03.2021  19:00   Рубин – Химки   2 : 1   
 23   19.03.2021  19:00   Сочи – Тамбов   2 : 0
-
 scores - 6
-
 23   17.03.2021  18:00   Ротор – Ростов                0:1     
 23   17.03.2021  20:00   Ахмат – Арсенал             2:1
 23   17.03.2021  20:00   ЦСКА – Зенит                  1:1
@@ -446,7 +455,6 @@ scores - 6
 23   18.03.2021  19:00   Спартак М – Урал            2:0
 23   19.03.2021  19:00   Рубин – Химки                2:1
 23   19.03.2021  19:00   Сочи – Тамбов                2:0
-
 Ротор локо 1-2
 Рубин сочи 2-1
 Краснодар ахмат 2-1
@@ -455,7 +463,6 @@ scores - 6
 Тамбов цска 0-3
 Ростов спартак 1-1
 Зенит химки 2-0
-
 		26	17.04.2021  14:00	
 Ахмат – Химки
 3 : 1	
@@ -480,14 +487,6 @@ scores - 6
 26	18.04.2021  19:00	
 Спартак М – Уфа
 0 : 3
-
-1	Пал_Геннадичъ	142	10
-2	Хрустальная гора	141	6
-3	Толич1	141	10
-4	Ded_Moroz	137	10
-5	Smith242	129	10
-6	Быш	120	10
-7	Fass 18	10	0
 
 [tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]
 [tr][td]1[/td][td]Пал_Геннадичъ[/td][td]142[/td][td]10[/td][/tr]
