@@ -220,9 +220,8 @@ class ButtonRefresh extends Element {
         
         this.$element.addEventListener('click', () => {
             if (this.source) {
-                
+                tourNumber.textContent = this.reader.readNumberTour(this.input.$element)
             }
-            
             this.input.games = this.reader.read(this.input.$element)
             Printer.showGames(this.input.games, this.output[0].$element)
         })
@@ -308,6 +307,16 @@ class Reader {
     
     read(input) {
         return this.handler(input)
+    }
+
+    readNumberTour(textArea) {
+        if (!textArea.value) {
+            return
+        }
+        
+        return parseInt(textArea.value
+            .substring(0, 5)
+            .trim())
     }
 }
 
