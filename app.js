@@ -220,10 +220,10 @@ class ButtonRefresh extends Element {
         
         this.$element.addEventListener('click', () => {
             if (this.source) {
-                tourNumber.textContent = this.reader.readNumberTour(this.input.$element)
+                Printer.printNumberTour(this.reader.readNumberTour(this.input.$element))
             }
             this.input.games = this.reader.read(this.input.$element)
-            Printer.showGames(this.input.games, this.output[0].$element)
+            Printer.printGames(this.input.games, this.output[0].$element)
         })
     }
 }
@@ -238,7 +238,7 @@ class ButtonCounter extends Element {
         this.$element.addEventListener('click', () => {
             try {
                 this.output[0].$element.innerHTML = Calculator.calculate(this.resultTour.games, this.forecast.games)
-                Printer.showGames(this.forecast.games, this.output[1].$element)
+                Printer.printGames(this.forecast.games, this.output[1].$element)
             } catch (error) {
                 this.output.$element.innerHTML = 'Uncorrect input data...'
             }
@@ -253,7 +253,7 @@ class Forecast {
 }
 
 class Printer {
-    static showGames(games, output) {
+    static printGames(games, output) {
         let table = `<table class="table table-striped table-hover">`
         
         const addClasses = (scores) => {
@@ -297,6 +297,12 @@ class Printer {
         table += '</table>'
     
         output.innerHTML = table
+    }
+
+    static printNumberTour(value) {
+        if (value) {
+            tourNumber.textContent = value
+        }
     }
 }
 
