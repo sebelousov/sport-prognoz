@@ -150,13 +150,13 @@ const handlers = [
   }
 ]
 
-class Element {
+class Elem {
     constructor(options) {
         this.$element = document.getElementById(options.selector)
     }
 }
 
-class Table extends Element {
+class Table extends Elem {
     constructor(options) {
         super(options)
         
@@ -184,7 +184,7 @@ class Table extends Element {
             return -1
         }
         
-        let head = '[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]\n'
+        let head = `[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b]${tourNumber.textContent} тур[/b][/td][/tr]\n`
         let table = value.replaceAll(/\t/g, '[/td][td]')
             .replaceAll(/\n/g, '[/td][/tr]\n[tr][td]')
         
@@ -210,7 +210,7 @@ class Table extends Element {
     }
 }
 
-class ButtonRefresh extends Element {
+class ButtonRefresh extends Elem {
     constructor(options) {
         super(options)
         this.input = options.input[0]
@@ -228,7 +228,7 @@ class ButtonRefresh extends Element {
     }
 }
 
-class ButtonCounter extends Element {
+class ButtonCounter extends Elem {
     constructor(options) {
         super(options)
         this.resultTour = options.input[0]
@@ -352,23 +352,23 @@ class Calculator {
     }
 }
 
-let resultTour = new Element({
+let resultTour = new Elem({
     selector: 'resultTour'
 })
 
-let resultGamer = new Element({
+let resultGamer = new Elem({
     selector: 'resultGamer'
 })
 
-let scores = new Element({
+let scores = new Elem({
     selector: 'scores'
 })
 
-let outputTour = new Element({
+let outputTour = new Elem({
     selector: 'showResultTour'
 })
 
-let outputGamer = new Element({
+let outputGamer = new Elem({
     selector: 'showResultGamer'
 })
 
@@ -418,97 +418,3 @@ function checkoutGames(games) {
 function addTags(string, tag) {
     return tag + string + tag
 }
-
-/*
-26   17.04.2021  14:00   Ахмат – Химки   3 : 1   
-26   17.04.2021  16:30   Ротор – Динамо М   0 : 3   
-26   17.04.2021  16:30   Локомотив М – Ростов   4 : 1   
-26   17.04.2021  19:00   Краснодар – Зенит   2 : 2   
-26   18.04.2021  12:00   Урал – Рубин   0 : 1   
-26   18.04.2021  14:00   Арсенал – Тамбов   4 : 0   
-26   18.04.2021  16:30   Сочи – ЦСКА   2 : 1   
-26   18.04.2021  19:00   Спартак М – Уфа   0 : 3
-21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
-21   06.03.2021  16:30   Ротор – Химки   1 : 1   
-21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
-21   07.03.2021  14:00   Урал – Уфа   1 : 0   
-21   07.03.2021  16:30   Динамо М – Тамбов   2 : 0   
-21   07.03.2021  19:00   Спартак М – Краснодар   1 : 2
-21   08.03.2021  14:00   Арсенал – Локомотив М   0 : 2   
-21   08.03.2021  16:30   Рубин – Зенит   1 : 2
-21   06.03.2021  14:00   ЦСКА – Ахмат   1 : 0   
-21   06.03.2021  16:30   Ротор – Химки   1 : 1   
-21   06.03.2021  19:00   Ростов – Сочи   2 : 1   
-21   07.03.2021  14:00   Урал – Уфа   1 : 0   
-21   07.03.2021  16:30   Динамо М – Тамбов   2 : 0   
-21   07.03.2021  19:00   Спартак М – Краснодар   1 : 1
-21   08.03.2021  14:00   Арсенал – Локомотив М   0 : 2   
-21   08.03.2021  16:30   Рубин – Зенит   1 : 2
----
-23   17.03.2021  18:00   Ротор – Ростов   0 : 4   
-23   17.03.2021  20:00   ЦСКА – Зенит   2 : 3   
-23   17.03.2021  20:00   Ахмат – Арсенал   2 : 0   
-23   18.03.2021  17:00   Уфа – Локомотив М   0 : 1   
-23   18.03.2021  19:00   Краснодар – Динамо М   2 : 3   
-23   18.03.2021  19:00   Спартак М – Урал   5 : 1   
-23   19.03.2021  19:00   Рубин – Химки   1 : 3   
-23   19.03.2021  19:00   Сочи – Тамбов   5 : 0
-23   17.03.2021  18:00   Ротор – Ростов   0 : 1   
-23   17.03.2021  20:00   ЦСКА – Зенит   1 : 2   
-23   17.03.2021  20:00   Ахмат – Арсенал   2 : 1   
-23   18.03.2021  17:00   Уфа – Локомотив М   0 : 2   
-23   18.03.2021  19:00   Краснодар – Динамо М   2 : 1   
-23   18.03.2021  19:00   Спартак М – Урал   2 : 1
-23   19.03.2021  19:00   Рубин – Химки   2 : 1   
-23   19.03.2021  19:00   Сочи – Тамбов   2 : 0
-scores - 6
-23   17.03.2021  18:00   Ротор – Ростов                0:1     
-23   17.03.2021  20:00   Ахмат – Арсенал             2:1
-23   17.03.2021  20:00   ЦСКА – Зенит                  1:1
-23   18.03.2021  17:00   Уфа – Локомотив М         0:1
-23   18.03.2021  19:00   Краснодар – Динамо М    1:0
-23   18.03.2021  19:00   Спартак М – Урал            2:0
-23   19.03.2021  19:00   Рубин – Химки                2:1
-23   19.03.2021  19:00   Сочи – Тамбов                2:0
-Ротор локо 1-2
-Рубин сочи 2-1
-Краснодар ахмат 2-1
-Динамо уфа 2-0
-Урал арсенал 2-0
-Тамбов цска 0-3
-Ростов спартак 1-1
-Зенит химки 2-0
-		26	17.04.2021  14:00	
-Ахмат – Химки
-3 : 1	
-26	17.04.2021  16:30	
-Ротор – Динамо М
-0 : 3	
-26	17.04.2021  16:30	
-Локомотив М – Ростов
-4 : 1	
-26	17.04.2021  19:00	
-Краснодар – Зенит
-2 : 2	
-26	18.04.2021  12:00	
-Урал – Рубин
-0 : 1	
-26	18.04.2021  14:00	
-Арсенал – Тамбов
-4 : 0	
-26	18.04.2021  16:30	
-Сочи – ЦСКА
-2 : 1	
-26	18.04.2021  19:00	
-Спартак М – Уфа
-0 : 3
-
-[tr][td][b]место[/b][/td][td][b]ники[/b][/td][td][b]итого[/b][/td][td][b] тур[/b][/td][/tr]
-[tr][td]1[/td][td]Пал_Геннадичъ[/td][td]142[/td][td]10[/td][/tr]
-[tr][td]2[/td][td]Хрустальная гора[/td][td]141[/td][td]6[/td][/tr]
-[tr][td]3[/td][td]Толич1[/td][td]141[/td][td]10[/td][/tr]
-[tr][td]4[/td][td]Ded_Moroz[/td][td]137[/td][td]10[/td][/tr]
-[tr][td]5[/td][td]Smith242[/td][td]129[/td][td]10[/td][/tr]
-[tr][td]6[/td][td]Быш[/td][td]120[/td][td]10[/td][/tr]
-[tr][td]7[/td][td]Fass 18[/td][td]10[/td][td]0[/td][/tr]
-*/
