@@ -7,6 +7,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="./style.css" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/66ffe2eaf3.js" crossorigin="anonymous"></script>
     
   </head>
   <body>
@@ -22,8 +24,13 @@
             </div>
           </div>
           <div class="row">
-            <div class="col text-end">
-              <button type="button" class="btn btn-light" id="refreshResultTour">&gt;&gt;&gt;</button>
+            <div class="col">
+              <div class="btn-group btn-group-sm mt-1" role="group">
+                <button type="button" class="btn btn-light" title="Загрузить"><i class="fas fa-download"></i></button>
+                <button type="button" class="btn btn-light" id="refreshResultTour" title="Добавить"><i class="fas fa-arrow-down"></i></button>
+                <button type="button" class="btn btn-light" title="Копировать"><i class="far fa-copy"></i></button>
+                <button type="button" class="btn btn-light" title="Вставить"><i class="fas fa-paste"></i></button>
+              </div>
             </div>
           </div>
         </div>
@@ -38,7 +45,12 @@
           </div>
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-light" id="refreshResultGamer">&lt;&lt;&lt;</button>
+              <div class="btn-group btn-group-sm mt-1" role="group">
+                <button type="button" class="btn btn-light" title="Загрузить"><i class="fas fa-download"></i></button>
+                <button type="button" class="btn btn-light" id="refreshResultGamer" title="Добавить"><i class="fas fa-arrow-down"></i></button>
+                <button type="button" class="btn btn-light" title="Копировать"><i class="far fa-copy"></i></button>
+                <button type="button" class="btn btn-light" title="Вставить"><i class="fas fa-paste"></i></button>
+              </div>
             </div>
           </div>
         </div>
@@ -61,7 +73,7 @@
       
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-light" id="resultCounter">Считать</button>
+          <button type="button" class="btn btn-light" id="resultCounter" title="Считать"><i class="fas fa-calculator"></i></button>
           <p>Итого: <span id="scores">0</span></p>
         </div>
         <div class="col">
@@ -77,7 +89,12 @@
             </header>
             <textarea class="form-control" placeholder="Leave a comment here" id="tableFormat" tabindex="4"></textarea>
           </div>
-          
+          <div class="btn-group btn-group-sm mt-1" role="group">
+            <button type="button" class="btn btn-light" title="Загрузить"><i class="fas fa-download"></i></button>
+            <button type="button" class="btn btn-light" title="Сохранить"><i class="far fa-save"></i></button>
+            <button type="button" class="btn btn-light" title="Копировать"><i class="far fa-copy"></i></button>
+            <button type="button" class="btn btn-light" title="Вставить"><i class="fas fa-paste"></i></button>
+          </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="format-table" id="scores-table" checked>
             <label class="form-check-label" for="scores-table">
