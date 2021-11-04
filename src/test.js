@@ -1,3 +1,11 @@
+function disemvowel(str) {
+    return str.split('').
+      filter(e => !/[aeiou]/i.test(e)).
+      join('');
+  }
+
+console.log(disemvowel('This website is for losers LOL!'));
+
 // function unique(arr) {
 //     return new Set(arr)
 // }
