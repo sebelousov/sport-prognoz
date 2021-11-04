@@ -21,14 +21,10 @@
               <div class="form-floating">
                 <textarea class="form-control" placeholder="Leave a comment here" id="resultTour" tabindex="1"></textarea>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
               <div class="btn-group btn-group-sm mt-1" role="group">
                 <button type="button" class="btn btn-light" title="Загрузить"><i class="fas fa-download"></i></button>
                 <button type="button" class="btn btn-light" id="refreshResultTour" title="Добавить"><i class="fas fa-arrow-down"></i></button>
-                <button type="button" class="btn btn-light" title="Копировать"><i class="far fa-copy"></i></button>
+                <button type="button" class="btn btn-light" title="Очистить" id="buttonClearLeft"><i class="fas fa-eraser"></i></i></button>
                 <button type="button" class="btn btn-light" title="Вставить"><i class="fas fa-paste"></i></button>
               </div>
             </div>
@@ -41,14 +37,10 @@
               <div class="form-floating">
                 <textarea class="form-control" placeholder="Leave a comment here" id="resultGamer" tabindex="2"></textarea>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
               <div class="btn-group btn-group-sm mt-1" role="group">
                 <button type="button" class="btn btn-light" title="Загрузить"><i class="fas fa-download"></i></button>
                 <button type="button" class="btn btn-light" id="refreshResultGamer" title="Добавить"><i class="fas fa-arrow-down"></i></button>
-                <button type="button" class="btn btn-light" title="Копировать"><i class="far fa-copy"></i></button>
+                <button type="button" class="btn btn-light" title="Очистить" id="buttonClearRight"><i class="fas fa-eraser"></i></i></button>
                 <button type="button" class="btn btn-light" title="Вставить"><i class="fas fa-paste"></i></button>
               </div>
             </div>
@@ -83,10 +75,10 @@
       
       <div class="row">
         <div class="col">
+          <header>
+            <h2>Форматирование таблицы</h2>
+          </header>
           <div class="form-floating">
-            <header>
-              <h2>Форматирование таблицы</h2>
-            </header>
             <textarea class="form-control" placeholder="Leave a comment here" id="tableFormat" tabindex="4"></textarea>
           </div>
           <div class="btn-group btn-group-sm mt-1" role="group">
@@ -94,6 +86,7 @@
             <button type="button" class="btn btn-light" title="Сохранить"><i class="far fa-save"></i></button>
             <button type="button" class="btn btn-light" title="Копировать"><i class="far fa-copy"></i></button>
             <button type="button" class="btn btn-light" title="Вставить"><i class="fas fa-paste"></i></button>
+            <button type="button" class="btn btn-light" title="Очистить"><i class="fas fa-eraser"></i></i></button>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="format-table" id="scores-table" checked>

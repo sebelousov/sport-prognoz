@@ -210,6 +210,23 @@ class Table extends Elem {
     }
 }
 
+class ButtonClear extends Elem {
+    constructor(options) {
+        super(options)
+
+        this.input = options.input[0]
+
+        this.$element.addEventListener('click', () => {
+            this.clear
+            (this.input.$element)
+        })
+    }
+
+    clear(element) {
+        element.value = ''
+    }
+}
+
 class ButtonRefresh extends Elem {
     constructor(options) {
         super(options)
@@ -284,7 +301,7 @@ class Printer {
         
         if (games) {
             for (let i = 0; i < games.length; i++) {
-                table += `<tr">
+                table += `<tr>
                     <td>${teams[games[i][host]]} - ${teams[games[i][guest]]}</td>
                     <td>${games[i][goals][0]} - ${games[i][goals][1]}</td>
                     ${addCol(games[i].scores)}
@@ -398,7 +415,15 @@ let counter = new ButtonCounter({
     output: [scores, outputGamer]
 })
 
+let buttonClearLeft = new ButtonClear({
+    selector: 'buttonClearLeft',
+    input: [resultTour]
+})
 
+let buttonClearRight = new ButtonClear({
+    selector: 'buttonClearRight',
+    input: [resultGamer]
+})
 
 function checkoutGames(games) {
     /* 
