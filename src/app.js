@@ -216,15 +216,23 @@ class ButtonClear extends Elem {
 
         this.input = options.input[0]
 
-        this.$element.addEventListener('click', () => {
-            this.clear
-            (this.input.$element)
+        this.$element.addEventListener('click', (event) => {
+            this.clear(this.getNode(event.target))
+            
         })
     }
 
     clear(element) {
         element.value = ''
     }
+
+    getNode(node) {
+        return node.parentElement
+            .parentElement
+            .parentElement
+            .firstElementChild
+            .firstElementChild
+    }    
 }
 
 class ButtonRefresh extends Elem {
