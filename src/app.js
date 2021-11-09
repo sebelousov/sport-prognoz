@@ -150,6 +150,30 @@ const handlers = [
   }
 ]
 
+const clear = (event) => {
+    let element = getElement(event.target)
+    element.value = ''
+}
+
+const copy = (event) => {
+    let element = getElement(event.target)
+    console.log(`Copy: ${element.value}`)
+}
+
+const paste = (event) => {
+    let element = getElement(event.target)
+    console.log(`Paste: ${element.value}`)
+}
+
+const clearButtons = document.querySelectorAll('.clear');
+addEventListeners(clearButtons, clear)
+
+const copyButtons = document.querySelectorAll('.copy');
+addEventListeners(copyButtons, copy)
+
+const pasteButtons = document.querySelectorAll('.paste');
+addEventListeners(pasteButtons, paste)
+
 class Elem {
     constructor(options) {
         this.$element = document.getElementById(options.selector)
@@ -210,30 +234,30 @@ class Table extends Elem {
     }
 }
 
-class ButtonClear extends Elem {
-    constructor(options) {
-        super(options)
+// class ButtonClear extends Elem {
+//     constructor(options) {
+//         super(options)
 
-        this.input = options.input[0]
+//         this.input = options.input[0]
 
-        this.$element.addEventListener('click', (event) => {
-            this.clear(this.getNode(event.target))
+//         this.$element.addEventListener('click', (event) => {
+//             this.clear(this.getNode(event.target))
             
-        })
-    }
+//         })
+//     }
 
-    clear(element) {
-        element.value = ''
-    }
+//     clear(element) {
+//         element.value = ''
+//     }
 
-    getNode(node) {
-        return node.parentElement
-            .parentElement
-            .parentElement
-            .firstElementChild
-            .firstElementChild
-    }    
-}
+//     getNode(node) {
+//         return node.parentElement
+//             .parentElement
+//             .parentElement
+//             .firstElementChild
+//             .firstElementChild
+//     }
+// }
 
 class ButtonRefresh extends Elem {
     constructor(options) {
@@ -423,15 +447,15 @@ let counter = new ButtonCounter({
     output: [scores, outputGamer]
 })
 
-let buttonClearLeft = new ButtonClear({
-    selector: 'buttonClearLeft',
-    input: [resultTour]
-})
+// let buttonClearLeft = new ButtonClear({
+//     selector: 'buttonClearLeft',
+//     input: [resultTour]
+// })
 
-let buttonClearRight = new ButtonClear({
-    selector: 'buttonClearRight',
-    input: [resultGamer]
-})
+// let buttonClearRight = new ButtonClear({
+//     selector: 'buttonClearRight',
+//     input: [resultGamer]
+// })
 
 function checkoutGames(games) {
     /* 
@@ -450,4 +474,18 @@ function checkoutGames(games) {
 
 function addTags(string, tag) {
     return tag + string + tag
+}
+
+function addEventListeners(elements, callback) {
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('click', callback)
+    }
+}
+
+function getElement(node) {
+    return node.parentElement
+        .parentElement
+        .parentElement
+        .firstElementChild
+        .firstElementChild
 }
