@@ -157,12 +157,13 @@ const clear = (event) => {
 
 const copy = (event) => {
     let element = getElement(event.target)
-    console.log(`Copy: ${element.value}`)
+    copyTextToClipboard(element.value)
+    
 }
 
 const paste = (event) => {
     let element = getElement(event.target)
-    console.log(`Paste: ${element.value}`)
+    element.value = pasteTextFromClipboard()
 }
 
 const clearButtons = document.querySelectorAll('.clear');
@@ -488,4 +489,59 @@ function getElement(node) {
         .parentElement
         .firstElementChild
         .firstElementChild
+}
+
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement('textarea')
+    textArea.value = text
+
+    textArea.style.top = 0
+    textArea.style.left = 0
+    textArea.style.position = 'fixed'
+
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+
+    try {
+        let successful = document.execCommand('copy')
+        let message = successful ? 'successful' : 'unsuccessful'
+        console.log(message)
+    } catch (error) {
+        console.error('Error ', error)
+    }
+
+    document.body.removeChild(textArea)
+}
+
+function copyTextToClipboard(text) {
+    if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text)
+        return
+    }
+
+    navigator.clipboard
+        .writeText(text)
+        .then(() => {
+            console.log('Copy')
+        })
+        .catch((error) => {
+            console.log('Error', error)
+        })
+}
+
+function pasteTextFromClipboard() {
+    let out
+    
+    navigator.clipboard
+        .readText()
+        .then((text) => {
+            console.log('Paste', text)
+            out = text
+        })
+        .catch((error) => {
+            console.log('Error', error)
+        })
+
+    return out
 }
