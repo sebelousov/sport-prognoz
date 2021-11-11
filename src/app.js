@@ -152,12 +152,13 @@ const handlers = [
 
 const clear = (event) => {
     let element = getElement(event.target)
-    element.value = ''
+    clearTextarea(element)
+    element.focus()
 }
 
 const copy = (event) => {
     let element = getElement(event.target)
-    copyTextToClipboard(element.value)
+    copyTextToClipboard(element)
     
 }
 
@@ -189,10 +190,6 @@ class Table extends Elem {
             setTimeout(() => {
                 this.$element.value = this.formatTable(this.$element.value)
             }, 1)
-        })
-        
-        this.$element.addEventListener('blur', (event) => {
-            event.target.value = ''
         })
     }
 
@@ -234,31 +231,6 @@ class Table extends Elem {
       
     }
 }
-
-// class ButtonClear extends Elem {
-//     constructor(options) {
-//         super(options)
-
-//         this.input = options.input[0]
-
-//         this.$element.addEventListener('click', (event) => {
-//             this.clear(this.getNode(event.target))
-            
-//         })
-//     }
-
-//     clear(element) {
-//         element.value = ''
-//     }
-
-//     getNode(node) {
-//         return node.parentElement
-//             .parentElement
-//             .parentElement
-//             .firstElementChild
-//             .firstElementChild
-//     }
-// }
 
 class ButtonRefresh extends Elem {
     constructor(options) {
@@ -448,16 +420,6 @@ let counter = new ButtonCounter({
     output: [scores, outputGamer]
 })
 
-// let buttonClearLeft = new ButtonClear({
-//     selector: 'buttonClearLeft',
-//     input: [resultTour]
-// })
-
-// let buttonClearRight = new ButtonClear({
-//     selector: 'buttonClearRight',
-//     input: [resultGamer]
-// })
-
 function checkoutGames(games) {
     /* 
     0. resultTour.length < resultGamer.length
@@ -514,20 +476,27 @@ function fallbackCopyTextToClipboard(text) {
     document.body.removeChild(textArea)
 }
 
-function copyTextToClipboard(text) {
-    if (!navigator.clipboard) {
-        fallbackCopyTextToClipboard(text)
-        return
-    }
+function copyTextToClipboard(input) {
+    // if (!navigator.clipboard) {
+    //     fallbackCopyTextToClipboard(text)
+    //     return
+    // }
 
-    navigator.clipboard
-        .writeText(text)
-        .then(() => {
-            console.log('Copy')
-        })
-        .catch((error) => {
-            console.log('Error', error)
-        })
+    // navigator.clipboard
+    //     .writeText(text)
+    //     .then(() => {
+    //         console.log('Copy')
+    //     })
+    //     .catch((error) => {
+    //         console.log('Error', error)
+    //     })
+
+    input.select()
+    document.execCommand('copy')
+}
+
+function clearTextarea(textArea) {
+    textArea.value = ''
 }
 
 function pasteTextFromClipboard() {
