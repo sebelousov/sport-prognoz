@@ -150,6 +150,10 @@ const handlers = [
   }
 ]
 
+const add = (event) => {
+    
+}
+
 const clear = (event) => {
     let element = getElement(event.target)
     clearTextarea(element)
@@ -164,17 +168,20 @@ const copy = (event) => {
 
 const paste = (event) => {
     let element = getElement(event.target)
-    element.value = pasteTextFromClipboard()
+    element.value = pasteTextFromClipboard(element)
 }
 
-const clearButtons = document.querySelectorAll('.clear');
-addEventListeners(clearButtons, clear)
+const clearBtn = document.querySelectorAll('.clear');
+addEventListeners(clearBtn, clear)
 
-const copyButtons = document.querySelectorAll('.copy');
-addEventListeners(copyButtons, copy)
+const copyBtn = document.querySelectorAll('.copy');
+addEventListeners(copyBtn, copy)
 
-const pasteButtons = document.querySelectorAll('.paste');
-addEventListeners(pasteButtons, paste)
+const pasteBtn = document.querySelectorAll('.paste');
+addEventListeners(pasteBtn, paste)
+
+const addBtn = document.querySelector('.add-forecast')
+addBtn.addEventListener('click', add)
 
 class Elem {
     constructor(options) {
@@ -453,27 +460,8 @@ function getElement(node) {
         .firstElementChild
 }
 
-function fallbackCopyTextToClipboard(text) {
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-
-    textArea.style.top = 0
-    textArea.style.left = 0
-    textArea.style.position = 'fixed'
-
-    document.body.appendChild(textArea)
-    textArea.focus()
-    textArea.select()
-
-    try {
-        let successful = document.execCommand('copy')
-        let message = successful ? 'successful' : 'unsuccessful'
-        console.log(message)
-    } catch (error) {
-        console.error('Error ', error)
-    }
-
-    document.body.removeChild(textArea)
+function clearTextarea(textArea) {
+    textArea.value = ''
 }
 
 function copyTextToClipboard(input) {
@@ -495,22 +483,13 @@ function copyTextToClipboard(input) {
     document.execCommand('copy')
 }
 
-function clearTextarea(textArea) {
-    textArea.value = ''
-}
-
-function pasteTextFromClipboard() {
-    let out
-    
+function pasteTextFromClipboard(input) {
     navigator.clipboard
         .readText()
         .then((text) => {
-            console.log('Paste', text)
-            out = text
+            input.value = text
         })
         .catch((error) => {
             console.log('Error', error)
         })
-
-    return out
 }
