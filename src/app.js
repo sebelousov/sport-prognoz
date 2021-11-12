@@ -465,22 +465,21 @@ function clearTextarea(textArea) {
 }
 
 function copyTextToClipboard(input) {
-    // if (!navigator.clipboard) {
-    //     fallbackCopyTextToClipboard(text)
-    //     return
-    // }
+    if (!navigator.clipboard) {
+        input.select()
+        document.execCommand('copy')
+    }
 
-    // navigator.clipboard
-    //     .writeText(text)
-    //     .then(() => {
-    //         console.log('Copy')
-    //     })
-    //     .catch((error) => {
-    //         console.log('Error', error)
-    //     })
+    navigator.clipboard
+        .writeText(input.value)
+        .then(() => {
+            
+        })
+        .catch((error) => {
+            console.log('Error', error)
+        })
 
-    input.select()
-    document.execCommand('copy')
+    
 }
 
 function pasteTextFromClipboard(input) {
