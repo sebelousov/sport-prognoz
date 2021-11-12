@@ -183,6 +183,88 @@ addEventListeners(pasteBtn, paste)
 const addBtn = document.querySelector('.add-forecast')
 addBtn.addEventListener('click', add)
 
+const calculator = {
+    calculate(tour, gamer) {
+        let scores = 0
+    
+        let compareGames = (gameSource, gameForecast) => {
+            if (gameForecast[goals][0] === gameSource[goals][0] && 
+                gameForecast[goals][1] === gameSource[goals][1]) {
+                gameForecast['scores'] = 3
+                return gameForecast['scores']
+            } else if (gameForecast[hostWin] === gameSource[hostWin]) {
+                gameForecast['scores'] = 1
+                return gameForecast['scores']
+            } else {
+                gameForecast['scores'] = 0
+                return gameForecast['scores']
+            }
+        }
+    
+        gamer.forEach(game => {
+            let gameSource = tour.find(g => g[liter] === game[liter])
+            scores += compareGames(gameSource, game)
+        });
+        return scores
+    }
+}
+
+const printer = {
+    print(text) {
+        console.log(text)
+    },
+    printGames(games, output) {
+        let table = `<table class="table table-striped table-hover">`
+        
+        const addClasses = (scores) => {
+            let className = ''
+            
+            if (scores === 3) {
+                className += 'badge rounded-pill bg-success'
+            } else if (scores === 1) {
+                className += 'badge rounded-pill bg-primary'
+            } else {
+                className += 'badge rounded-pill bg-danger'
+            }
+            
+            return className
+        }
+        
+        const addCol = (scores) => {
+            if (scores === 3) {
+                return `<td><span class='${addClasses(scores)}'>+3</span></td>`
+            } else if (scores === 1) {
+                return `<td><span class='${addClasses(scores)}'>+1</span></td>`
+            } else if (scores === 0) {
+                return `<td><span class='${addClasses(scores)}'>--</span></td>`
+            } else {
+                return ''
+            }
+        }
+        
+        if (games) {
+            for (let i = 0; i < games.length; i++) {
+                table += `<tr>
+                    <td>${teams[games[i][host]]} - ${teams[games[i][guest]]}</td>
+                    <td>${games[i][goals][0]} - ${games[i][goals][1]}</td>
+                    ${addCol(games[i].scores)}
+                    </tr>\n`
+            }
+        } else {
+            table = 'Uncorrect input data...'
+        }
+        
+        table += '</table>'
+    
+        output.innerHTML = table
+    },
+    printNumberTour(value) {
+        if (value) {
+            tourNumber.textContent = value
+        }
+    }
+}
+
 class Elem {
     constructor(options) {
         this.$element = document.getElementById(options.selector)
@@ -249,10 +331,10 @@ class ButtonRefresh extends Elem {
         
         this.$element.addEventListener('click', () => {
             if (this.source) {
-                Printer.printNumberTour(this.reader.readNumberTour(this.input.$element))
+                printer.printNumberTour(this.reader.readNumberTour(this.input.$element))
             }
             this.input.games = this.reader.read(this.input.$element)
-            Printer.printGames(this.input.games, this.output[0].$element)
+            printer.printGames(this.input.games, this.output[0].$element)
         })
     }
 }
@@ -266,8 +348,8 @@ class ButtonCounter extends Elem {
         
         this.$element.addEventListener('click', () => {
             try {
-                this.output[0].$element.innerHTML = Calculator.calculate(this.resultTour.games, this.forecast.games)
-                Printer.printGames(this.forecast.games, this.output[1].$element)
+                this.output[0].$element.innerHTML = calculator.calculate(this.resultTour.games, this.forecast.games)
+                printer.printGames(this.forecast.games, this.output[1].$element)
             } catch (error) {
                 this.output.$element.innerHTML = 'Uncorrect input data...'
             }
@@ -278,60 +360,6 @@ class ButtonCounter extends Elem {
 class Forecast {
     constructor(games) {
         this.games = games
-    }
-}
-
-class Printer {
-    static printGames(games, output) {
-        let table = `<table class="table table-striped table-hover">`
-        
-        const addClasses = (scores) => {
-            let className = ''
-            
-            if (scores === 3) {
-                className += 'badge rounded-pill bg-success'
-            } else if (scores === 1) {
-                className += 'badge rounded-pill bg-primary'
-            } else {
-                className += 'badge rounded-pill bg-danger'
-            }
-            
-            return className
-        }
-        
-        const addCol = (scores) => {
-            if (scores === 3) {
-                return `<td><span class='${addClasses(scores)}'>+3</span></td>`
-            } else if (scores === 1) {
-                return `<td><span class='${addClasses(scores)}'>+1</span></td>`
-            } else if (scores === 0) {
-                return `<td><span class='${addClasses(scores)}'>--</span></td>`
-            } else {
-                return ''
-            }
-        }
-        
-        if (games) {
-            for (let i = 0; i < games.length; i++) {
-                table += `<tr>
-                    <td>${teams[games[i][host]]} - ${teams[games[i][guest]]}</td>
-                    <td>${games[i][goals][0]} - ${games[i][goals][1]}</td>
-                    ${addCol(games[i].scores)}
-                    </tr>\n`
-            }
-        } else {
-            table = 'Uncorrect input data...'
-        }
-        
-        table += '</table>'
-    
-        output.innerHTML = table
-    }
-
-    static printNumberTour(value) {
-        if (value) {
-            tourNumber.textContent = value
-        }
     }
 }
 
@@ -355,31 +383,31 @@ class Reader {
     }
 }
 
-class Calculator {
-    static calculate(tour, gamer) {
-        let scores = 0
+// class Calculator {
+//     static calculate(tour, gamer) {
+//         let scores = 0
 
-        let compareGames = (gameSource, gameForecast) => {
-            if (gameForecast[goals][0] === gameSource[goals][0] && 
-                gameForecast[goals][1] === gameSource[goals][1]) {
-                gameForecast['scores'] = 3
-                return gameForecast['scores']
-            } else if (gameForecast[hostWin] === gameSource[hostWin]) {
-                gameForecast['scores'] = 1
-                return gameForecast['scores']
-            } else {
-                gameForecast['scores'] = 0
-                return gameForecast['scores']
-            }
-        }
+//         let compareGames = (gameSource, gameForecast) => {
+//             if (gameForecast[goals][0] === gameSource[goals][0] && 
+//                 gameForecast[goals][1] === gameSource[goals][1]) {
+//                 gameForecast['scores'] = 3
+//                 return gameForecast['scores']
+//             } else if (gameForecast[hostWin] === gameSource[hostWin]) {
+//                 gameForecast['scores'] = 1
+//                 return gameForecast['scores']
+//             } else {
+//                 gameForecast['scores'] = 0
+//                 return gameForecast['scores']
+//             }
+//         }
 
-        gamer.forEach(game => {
-            let gameSource = tour.find(g => g[liter] === game[liter])
-            scores += compareGames(gameSource, game)
-        });
-        return scores
-    }
-}
+//         gamer.forEach(game => {
+//             let gameSource = tour.find(g => g[liter] === game[liter])
+//             scores += compareGames(gameSource, game)
+//         });
+//         return scores
+//     }
+// }
 
 let resultTour = new Elem({
     selector: 'resultTour'
