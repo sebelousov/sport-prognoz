@@ -383,32 +383,6 @@ class Reader {
     }
 }
 
-// class Calculator {
-//     static calculate(tour, gamer) {
-//         let scores = 0
-
-//         let compareGames = (gameSource, gameForecast) => {
-//             if (gameForecast[goals][0] === gameSource[goals][0] && 
-//                 gameForecast[goals][1] === gameSource[goals][1]) {
-//                 gameForecast['scores'] = 3
-//                 return gameForecast['scores']
-//             } else if (gameForecast[hostWin] === gameSource[hostWin]) {
-//                 gameForecast['scores'] = 1
-//                 return gameForecast['scores']
-//             } else {
-//                 gameForecast['scores'] = 0
-//                 return gameForecast['scores']
-//             }
-//         }
-
-//         gamer.forEach(game => {
-//             let gameSource = tour.find(g => g[liter] === game[liter])
-//             scores += compareGames(gameSource, game)
-//         });
-//         return scores
-//     }
-// }
-
 let resultTour = new Elem({
     selector: 'resultTour'
 })
